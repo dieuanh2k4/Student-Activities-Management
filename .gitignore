@@ -1,2 +1,11 @@
-/bin
-/obj
+[Bb]in/
+[Oo]bj/
+*.user
+*.suo
+*.[Cc]ache
+*.bak
+*.ncb
+*.log
+*.vspscc
+[Dd]ebug*/
+[Rr]elease*/
