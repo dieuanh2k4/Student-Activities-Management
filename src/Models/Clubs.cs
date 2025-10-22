@@ -13,5 +13,7 @@ namespace StudentActivities.src.Models
         public int UserId { get; set; }
         
         public Users? Users { get; set; }
+        public List<Notifications>? Notifications { get; set; }
+
     }
 }
