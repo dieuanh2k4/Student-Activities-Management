@@ -11,5 +11,7 @@ namespace StudentActivities.src.Models
         public string? Name { get; set; }
         public DateOnly StartDate { get; set; }
         public DateOnly EndDate { get; set; }
+        
+        public List<TrainingScores>? TrainingScores { get; set; }
     }
 }

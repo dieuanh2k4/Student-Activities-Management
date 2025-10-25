@@ -9,15 +9,29 @@ namespace StudentActivities.src.Models
     {
         public int Id { get; set; }
         public string? Name { get; set; }
-        public DateOnly StartDate { get; set; }
-        public DateOnly EndDate { get; set; }
-        public string? Location { get; set; }
-        public int MaxCapacity { get; set; }
-        public int CurrentRegistrations { get; set; }
-        public string? Status { get; set; }
-        public int UserId { get; set; }
+        public string? Thumbnail { get; set; } // ảnh sự kiện
+        public string? Description { get; set; } // mô tả sự kiện
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public string? Location { get; set; } // địa điểm
+        public int MaxCapacity { get; set; } // số người tham gia
+        public int CurrentRegistrations { get; set; } // số người đăng kí hiện tại
+        public string? Status
+        {
+            get
+            {
+                var today = DateTime.Today;
+                if (today < StartDate) return "Sắp diễn ra";
+                if (today > EndDate) return "Đã kết thúc";
+                return "Đang diễn ra";
+            }
+        }
+        public int OrganizerId { get; set; }
 
-        public Users? Users { get; set; }
+        public Organizers? Organizers { get; set; }
+        public Resgistrations? Resgistrations { get; set; }
         public List<Notifications>? Notifications { get; set; }
+        public TrainingScores? TrainingScores { get; set; }
+        public Checkin? Checkin { get; set; }
     }
 }

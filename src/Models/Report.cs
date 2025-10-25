@@ -9,5 +9,10 @@ namespace StudentActivities.src.Models
     {
         public int Id { get; set; }
         public string? Type { get; set; }
+        public int AdminId { get; set; }
+        public int OrganizerId { get; set; }
+
+        public Admins? Admins { get; set; }
+        public Organizers? Organizers { get; set; }
     }
 }
