@@ -41,5 +41,21 @@ namespace StudentActivities.src.Services.Implements
 
             return newUser;
         }
+        
+        public async Task<Users> UpdateUser([FromForm] UpdateUserDto updateUserDto, int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                throw new Result("Không tìm thấy tài khoản cần chỉnh sửa");
+            }
+
+            user.UserName = updateUserDto.UserName;
+            user.Password = updateUserDto.Password;
+            user.Role = updateUserDto.Role;
+
+            return user;
+        }
     }
 }
