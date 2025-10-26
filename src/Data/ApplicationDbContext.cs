@@ -11,6 +11,7 @@ namespace StudentActivities.src.Data
     public class ApplicationDbContext : DbContext
     {
         public DbSet<AcademicClasses> AcademicClasses { get; set; }
+        public DbSet<Checkin> Checkins { get; set; }
         public DbSet<Clubs> Clubs { get; set; }
         public DbSet<Events> Events { get; set; }
         public DbSet<Faculties> Faculties { get; set; }
@@ -307,8 +308,8 @@ namespace StudentActivities.src.Data
                     .IsRequired()
                     .HasMaxLength(10);
                 entity.Property(u => u.Role)
-                    .IsRequired()
-                    .HasMaxLength(20);
+                    .IsRequired();
+                    
                 // entity.Property(u => u.FirstName)
                 //     .IsRequired()
                 //     .IsUnicode()

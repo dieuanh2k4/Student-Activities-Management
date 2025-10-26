@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using StudentActivities.src.Data;
+using StudentActivities.src.Services.Implements;
+using StudentActivities.src.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,11 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

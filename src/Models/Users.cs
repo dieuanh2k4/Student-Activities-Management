@@ -16,7 +16,6 @@ namespace StudentActivities.src.Models
         // public string? PhoneNumber { get; set; }
         // public DateOnly Birth { get; set; }
         // public string? Email { get; set; }
-        // public int Role { get; set; }
         // public string? Faculty { get; set; }
         // public string? Class { get; set; }
         // public string? Semester { get; set; }

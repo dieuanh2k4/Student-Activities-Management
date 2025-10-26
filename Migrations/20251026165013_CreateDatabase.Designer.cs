@@ -12,8 +12,8 @@ using StudentActivities.src.Data;
 namespace StudentActivities.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251025165951_UpdateDatabase")]
-    partial class UpdateDatabase
+    [Migration("20251026165013_CreateDatabase")]
+    partial class CreateDatabase
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -120,7 +120,7 @@ namespace StudentActivities.Migrations
                     b.HasIndex("StudentId")
                         .IsUnique();
 
-                    b.ToTable("Checkin");
+                    b.ToTable("Checkins");
                 });
 
             modelBuilder.Entity("StudentActivities.src.Models.Clubs", b =>
@@ -516,8 +516,7 @@ namespace StudentActivities.Migrations
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserName")
                         .IsRequired()

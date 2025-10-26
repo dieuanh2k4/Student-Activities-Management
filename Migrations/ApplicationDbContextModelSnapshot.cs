@@ -117,7 +117,7 @@ namespace StudentActivities.Migrations
                     b.HasIndex("StudentId")
                         .IsUnique();
 
-                    b.ToTable("Checkin");
+                    b.ToTable("Checkins");
                 });
 
             modelBuilder.Entity("StudentActivities.src.Models.Clubs", b =>
@@ -513,8 +513,7 @@ namespace StudentActivities.Migrations
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasColumnType("text");
 
                     b.Property<string>("UserName")
                         .IsRequired()

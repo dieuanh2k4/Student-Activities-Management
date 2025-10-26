@@ -13,7 +13,6 @@ namespace StudentActivities.src.Models
         public string? PhoneNumber { get; set; }
         public DateOnly Birth { get; set; }
         public string? Email { get; set; }
-        // public string Role { get; set; } = "Sinh Viên";
         public int UserId { get; set; }
         public int AcademicClassId { get; set; }
         public int TrainingScore { get; set; }
