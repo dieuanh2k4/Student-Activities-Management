@@ -55,7 +55,7 @@ namespace StudentActivities.src.Controllers
             }
         }
 
-        [HttpPut("update-user")]
+        [HttpPut("update-user/{id}")]
         public async Task<IActionResult> UpdateUser([FromForm] UpdateUserDto updateUserDto, int id)
         {
             try
@@ -65,6 +65,24 @@ namespace StudentActivities.src.Controllers
                 await _context.SaveChangesAsync();
 
                 return Ok(updateUser);
+            }
+            catch (Exception ex)
+            {
+                return ReturnException(ex);
+            }
+        }
+
+        [HttpDelete("delete-user/{id}")]
+        public async Task<IActionResult> DeleteUser(int id)
+        {
+            try
+            {
+                var user = await _userService.DeleteUser(id);
+
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+
+                return Ok(_userService);
             }
             catch (Exception ex)
             {

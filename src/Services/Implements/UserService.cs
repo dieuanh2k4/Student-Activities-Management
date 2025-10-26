@@ -41,7 +41,7 @@ namespace StudentActivities.src.Services.Implements
 
             return newUser;
         }
-        
+
         public async Task<Users> UpdateUser([FromForm] UpdateUserDto updateUserDto, int id)
         {
             var user = await _context.Users.FindAsync(id);
@@ -56,6 +56,20 @@ namespace StudentActivities.src.Services.Implements
             user.Role = updateUserDto.Role;
 
             return user;
+        }
+        
+        public async Task<Users> DeleteUser(int id)
+        {
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                throw new Result("Không tìm thấy user cần xóa");
+            }
+            else
+            {
+                return user;
+            }
         }
     }
 }

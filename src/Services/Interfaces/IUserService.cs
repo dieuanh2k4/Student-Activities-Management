@@ -13,5 +13,6 @@ namespace StudentActivities.src.Services.Interfaces
         Task<List<Users>> GetAllUsers();
         Task<Users> CreateUser([FromForm] CreateUserDto createUserDto);
         Task<Users> UpdateUser([FromForm] UpdateUserDto updateUserDto, int id);
+        Task<Users> DeleteUser(int id);
     }
 }
