@@ -7704,19 +7704,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Dieu Anh\\.nuget\\packages\\": {}
+    "C:\\Users\\Admin\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\4-1\\server 2\\ĐỒ ÁN\\StudentActivities\\StudentActivities.csproj",
+      "projectUniqueName": "E:\\Server_nang_cao\\Student-Activities-Management\\StudentActivities.csproj",
       "projectName": "StudentActivities",
-      "projectPath": "D:\\4-1\\server 2\\ĐỒ ÁN\\StudentActivities\\StudentActivities.csproj",
-      "packagesPath": "C:\\Users\\Dieu Anh\\.nuget\\packages\\",
-      "outputPath": "D:\\4-1\\server 2\\ĐỒ ÁN\\StudentActivities\\obj\\",
+      "projectPath": "E:\\Server_nang_cao\\Student-Activities-Management\\StudentActivities.csproj",
+      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "outputPath": "E:\\Server_nang_cao\\Student-Activities-Management\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Dieu Anh\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -7739,7 +7739,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0": {
@@ -7809,7 +7810,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.407/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
