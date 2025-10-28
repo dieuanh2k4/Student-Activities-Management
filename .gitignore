@@ -24,3 +24,14 @@ obj/
 # Others
 *.deps.json
 *.json
+obj/project.nuget.cache
+obj/project.nuget.cache
+obj/StudentActivities.csproj.nuget.dgspec.json
+obj/project.nuget.cache
+obj/StudentActivities.csproj.nuget.dgspec.json
+obj/StudentActivities.csproj.nuget.g.props
+obj/Debug/net8.0/StudentActivities.AssemblyInfo.cs
+obj/Debug/net8.0/StudentActivities.AssemblyInfoInputs.cache
+obj/Debug/net8.0/StudentActivities.csproj.AssemblyReference.cache
+obj/Debug/net8.0/StudentActivities.assets.cache
+obj/Debug/net8.0/StudentActivities.GeneratedMSBuildEditorConfig.editorconfig
