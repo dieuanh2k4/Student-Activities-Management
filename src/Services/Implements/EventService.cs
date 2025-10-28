@@ -24,7 +24,7 @@ namespace StudentActivities.src.Services.Implements
         public EventService(ApplicationDbContext context, IOptions<CloudinarySetting> config)
         {
             var acc = new Account(
-                config.Value.CloundName,
+                config.Value.CloudName,
                 config.Value.ApiKey,
                 config.Value.ApiSecret
             );

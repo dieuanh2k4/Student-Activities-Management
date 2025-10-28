@@ -175,6 +175,12 @@ namespace StudentActivities.Migrations
                         .IsUnicode(true)
                         .HasColumnType("character varying(1000)");
 
+                    b.Property<string>("DetailDescription")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(2000)");
+
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -194,6 +200,12 @@ namespace StudentActivities.Migrations
 
                     b.Property<int>("OrganizerId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Paticipants")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .IsUnicode(true)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
