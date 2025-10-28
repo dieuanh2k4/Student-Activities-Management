@@ -1,11 +1,26 @@
-[Bb]in/
-[Oo]bj/
+# Build folders
+bin/
+obj/
+
+# VS & VSCode
+.vs/
+.vscode/
+
+# User files
 *.user
 *.suo
-*.[Cc]ache
-*.bak
-*.ncb
+
+# Build outputs
+*.exe
+*.dll
+*.pdb
+*.cache
 *.log
-*.vspscc
-[Dd]ebug*/
-[Rr]elease*/
+
+# NuGet
+*.nupkg
+*.nuget.*
+
+# Others
+*.deps.json
+*.json
