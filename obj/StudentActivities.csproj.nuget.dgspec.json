@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\edzor\\Desktop\\Y\\Student-Activities-Management\\StudentActivities.csproj": {}
+    "D:\\4-1\\server 2\\ĐỒ ÁN\\StudentActivities\\StudentActivities.csproj": {}
   },
   "projects": {
-    "C:\\Users\\edzor\\Desktop\\Y\\Student-Activities-Management\\StudentActivities.csproj": {
+    "D:\\4-1\\server 2\\ĐỒ ÁN\\StudentActivities\\StudentActivities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\edzor\\Desktop\\Y\\Student-Activities-Management\\StudentActivities.csproj",
+        "projectUniqueName": "D:\\4-1\\server 2\\ĐỒ ÁN\\StudentActivities\\StudentActivities.csproj",
         "projectName": "StudentActivities",
-        "projectPath": "C:\\Users\\edzor\\Desktop\\Y\\Student-Activities-Management\\StudentActivities.csproj",
-        "packagesPath": "C:\\Users\\edzor\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\edzor\\Desktop\\Y\\Student-Activities-Management\\obj\\",
+        "projectPath": "D:\\4-1\\server 2\\ĐỒ ÁN\\StudentActivities\\StudentActivities.csproj",
+        "packagesPath": "C:\\Users\\Dieu Anh\\.nuget\\packages\\",
+        "outputPath": "D:\\4-1\\server 2\\ĐỒ ÁN\\StudentActivities\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\edzor\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\Dieu Anh\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -95,7 +95,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.415/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.407/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
