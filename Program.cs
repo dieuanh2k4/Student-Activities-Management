@@ -1,9 +1,15 @@
 using Ganss.Xss;
 using Microsoft.EntityFrameworkCore;
 using StudentActivities.src.Data;
+using StudentActivities.src.Repositories.Implements;
+using StudentActivities.src.Repositories.Interfaces;
 using StudentActivities.src.Services.Implements;
 using StudentActivities.src.Services.Interfaces;
 using StudentActivities.src.Utils;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +17,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+});
 builder.Services.AddScoped<IEventService, EventService>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -20,6 +29,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IClubService, ClubService>();
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IOrganizerService, OrganizerService>();
 
 // Cấu hình Cloudinary
 builder.Services.Configure<CloudinarySetting>(
@@ -45,6 +59,26 @@ builder.Services.AddSingleton<IHtmlSanitizer>(provider =>
 
     return sanitizer;
 });
+
+// JWT Config
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(key)
+        };
+    });
+
+// Dependency Injection
+
 
 var app = builder.Build();
 

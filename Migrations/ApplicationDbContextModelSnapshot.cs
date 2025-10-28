@@ -293,16 +293,10 @@ namespace StudentActivities.Migrations
                     b.Property<DateOnly>("Birth")
                         .HasColumnType("date");
 
-                    b.Property<int>("ClubId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("FirstName")
                         .IsRequired()

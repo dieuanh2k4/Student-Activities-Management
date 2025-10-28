@@ -444,6 +444,8 @@ namespace StudentActivities.src.Data
                 entity.Property(u => u.Email)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(u => u.UserId)
+                    .IsRequired();
                 
                 entity.HasOne(o => o.Users)
                     .WithOne(u => u.Organizers)
