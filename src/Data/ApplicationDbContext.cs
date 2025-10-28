@@ -114,9 +114,17 @@ namespace StudentActivities.src.Data
                 entity.Property(e => e.Thumbnail)
                     .IsRequired()
                     .HasMaxLength(500);
+                entity.Property(e => e.Paticipants)
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .IsUnicode();
                 entity.Property(e => e.Description)
                     .IsRequired()
                     .HasMaxLength(1000)
+                    .IsUnicode();
+                entity.Property(e => e.DetailDescription)
+                    .IsRequired()
+                    .HasMaxLength(2000)
                     .IsUnicode();
                 entity.Property(e => e.StartDate)
                     .IsRequired();

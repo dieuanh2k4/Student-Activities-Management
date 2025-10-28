@@ -6,7 +6,9 @@ namespace StudentActivities.src.Dtos.Events
     {
         public string? Name { get; set; }
         public string? Thumbnail { get; set; }
+        public string? Paticipants { get; set; }
         public string? Description { get; set; }
+        public string? DetailDescription { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string? Location { get; set; }

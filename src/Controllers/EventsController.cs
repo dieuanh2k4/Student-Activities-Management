@@ -7,51 +7,94 @@ namespace StudentActivities.src.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class EventsController : ControllerBase
+    public class EventsController : ApiControllerBase
     {
         private readonly IEventService _svc;
 
-        public EventsController(IEventService svc)
+        public EventsController(IEventService svc ,ILogger<EventsController> logger) : base(logger)
         {
             _svc = svc;
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateEventDto dto)
+        public async Task<IActionResult> Create([FromForm] CreateEventDto dto, IFormFile file)
         {
-            var created = await _svc.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+            try
+            {
+                if (file != null)
+                {
+                    var uploadResult = await _svc.UploadImage(file);
+                    dto.Thumbnail = uploadResult.SecureUrl.ToString();
+                }
+
+                var created = await _svc.CreateAsync(dto);
+
+                // return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
+                return Ok(created);
+            }
+            catch (Exception ex)
+            {
+                return ReturnException(ex);
+            }
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll() 
         {
-            var list = await _svc.GetAllAsync();
-            return Ok(list);
+            try
+            {
+                var list = await _svc.GetAllAsync();
+                return Ok(list);
+            }
+            catch (Exception ex)
+            {
+                return ReturnException(ex);
+            }
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var item = await _svc.GetByIdAsync(id);
-            if (item == null) return NotFound();
-            return Ok(item);
+            try
+            {
+                var item = await _svc.GetByIdAsync(id);
+                if (item == null) return NotFound();
+                return Ok(item);
+            }
+            catch (Exception ex)
+            {
+                return ReturnException(ex);
+            }
         }
 
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateEventDto dto)
         {
-            var ok = await _svc.UpdateAsync(id, dto);
-            if (!ok) return NotFound();
-            return NoContent();
+            try
+            {
+                var ok = await _svc.UpdateAsync(id, dto);
+                if (!ok) return NotFound();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return ReturnException(ex);
+            }
         }
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var ok = await _svc.DeleteAsync(id);
-            if (!ok) return NotFound();
-            return NoContent();
+            try
+            {
+                var ok = await _svc.DeleteAsync(id);
+                if (!ok) return NotFound();
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return ReturnException(ex);
+            }
         }
     }
 }

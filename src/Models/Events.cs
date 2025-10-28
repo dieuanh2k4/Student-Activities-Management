@@ -10,7 +10,9 @@ namespace StudentActivities.src.Models
         public int Id { get; set; }
         public string? Name { get; set; }
         public string? Thumbnail { get; set; } // ảnh sự kiện
+        public string? Paticipants { get; set; } // người tham gia
         public string? Description { get; set; } // mô tả sự kiện
+        public string? DetailDescription { get; set; } // mô tả chi tiết sự kiện
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public string? Location { get; set; } // địa điểm
