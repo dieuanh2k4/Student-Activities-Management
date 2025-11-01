@@ -363,6 +363,8 @@ namespace StudentActivities.src.Data
                 //     .HasMaxLength(20);
                 entity.Property(s => s.AcademicClassId)
                     .IsRequired();
+                entity.Property(s => s.FacultyId)
+                    .IsRequired();
                 entity.Property(u => u.FirstName)
                     .IsRequired()
                     .IsUnicode()
