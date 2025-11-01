@@ -25,8 +25,8 @@ Migrations/
 # Others
 *.md
 *.http
-*.deps.json
-*.json
+# *.deps.json
+# *.json
 obj/project.nuget.cache
 obj/project.nuget.cache
 obj/StudentActivities.csproj.nuget.dgspec.json
