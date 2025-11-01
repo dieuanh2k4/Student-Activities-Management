@@ -71,5 +71,20 @@ namespace StudentActivities.src.Controllers
                 return ReturnException(ex);
             }
         }
+
+        [HttpGet("get-training-score")]
+        public async Task<IActionResult> GetTrainingScore(int studentId)
+        {
+            try
+            {
+                var trainingScore = await _studentService.GetTrainingScore(studentId);
+
+                return Ok(trainingScore);
+            }
+            catch (Exception ex)
+            {
+                return ReturnException(ex);
+            }
+        }
     }
 }

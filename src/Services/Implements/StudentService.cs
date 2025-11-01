@@ -24,7 +24,7 @@ namespace StudentActivities.src.Services.Implements
             _context = context;
         }
 
-                public async Task<List<Students>> GetAllStudent()
+        public async Task<List<Students>> GetAllStudent()
         {
             return await _context.Students
                 .Include(s => s.Users)
@@ -55,7 +55,7 @@ namespace StudentActivities.src.Services.Implements
             var newStudent = await createStudentDto.ToStudentFromCreateDto(userid);
             return newStudent;
         }
-        
+
         public async Task<Students> UpdateInforStudent([FromForm] UpdateStudentDto updateStudentDto, int id)
         {
             var student = await _context.Students.FindAsync(id);
@@ -74,6 +74,20 @@ namespace StudentActivities.src.Services.Implements
             student.FacultyId = updateStudentDto.FacultyId;
 
             return student;
+        }
+        
+        public async Task<List<TrainingScores>> GetTrainingScore(int studentId)
+        {
+            var trainingScores = await _context.TrainingScores
+                .Where(s => s.StudentId == studentId)
+                .ToListAsync();
+
+            if (trainingScores == null || !trainingScores.Any())
+            {
+                throw new Result("Không tìm thấy điểm rèn luyện cho sinh viên này");
+            }
+
+            return trainingScores;
         }
     }
 }
