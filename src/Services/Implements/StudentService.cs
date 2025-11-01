@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentActivities.src.Constant;
 using StudentActivities.src.Data;
@@ -50,9 +51,29 @@ namespace StudentActivities.src.Services.Implements
                 // Nếu đã tồn tại, ném ra một lỗi nghiệp vụ rõ ràng
                 throw new Result("Tài khoản này đã được đăng ký làm sinh viên.");
             }
-            
+
             var newStudent = await createStudentDto.ToStudentFromCreateDto(userid);
             return newStudent;
+        }
+        
+        public async Task<Students> UpdateInforStudent([FromForm] UpdateStudentDto updateStudentDto, int id)
+        {
+            var student = await _context.Students.FindAsync(id);
+
+            if (student == null)
+            {
+                throw new Result("Không tìm thấy người dùng cần chỉnh sửa");
+            }
+
+            student.FirstName = updateStudentDto.FirstName;
+            student.LastName = updateStudentDto.LastName;
+            student.PhoneNumber = updateStudentDto.PhoneNumber;
+            student.Birth = updateStudentDto.Birth;
+            student.Email = updateStudentDto.Email;
+            student.AcademicClassId = updateStudentDto.AcademicClassId;
+            student.FacultyId = updateStudentDto.FacultyId;
+
+            return student;
         }
     }
 }

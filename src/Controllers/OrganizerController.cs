@@ -54,5 +54,22 @@ namespace StudentActivities.src.Controllers
                 return ReturnException(ex);
             }
         }
+
+        [HttpPut("update-organizer/{id}")]
+        public async Task<IActionResult> UpdateInforOrganizer([FromForm] UpdateOrganizerDto updateOrganizerDto, int id)
+        {
+            try
+            {
+                var organizer = await _organizer.UpdateInforOrganizer(updateOrganizerDto, id);
+
+                await _context.SaveChangesAsync();
+
+                return Ok(organizer);
+            }
+            catch (Exception ex)
+            {
+                return ReturnException(ex);
+            }
+        }
     }
 }

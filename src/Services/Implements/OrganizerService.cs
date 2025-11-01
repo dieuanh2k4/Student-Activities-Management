@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentActivities.src.Constant;
 using StudentActivities.src.Data;
@@ -48,9 +49,27 @@ namespace StudentActivities.src.Services.Implements
                 // Nếu đã tồn tại, ném ra một lỗi nghiệp vụ rõ ràng
                 throw new Result("Tài khoản này đã được đăng ký làm ban tổ chức.");
             }
-            
+
             var newOrganizer = await createOrganizerDto.ToOrganizerFromCreateDto(userid);
             return newOrganizer;
+        }
+        
+        public async Task<Organizers> UpdateInforOrganizer([FromForm] UpdateOrganizerDto updateOrganizerDto, int id)
+        {
+            var organizer = await _context.Organizers.FindAsync(id);
+
+            if (organizer == null)
+            {
+                throw new Result("Không tìm thấy người dùng cần chỉnh sửa");
+            }
+
+            organizer.FirstName = updateOrganizerDto.FirstName;
+            organizer.LastName = updateOrganizerDto.LastName;
+            organizer.PhoneNumber = updateOrganizerDto.PhoneNumber;
+            organizer.Birth = updateOrganizerDto.Birth;
+            organizer.Email = updateOrganizerDto.Email;
+
+            return organizer;
         }
     }
 }

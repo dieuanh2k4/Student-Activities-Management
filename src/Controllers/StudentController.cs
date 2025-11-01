@@ -54,5 +54,22 @@ namespace StudentActivities.src.Controllers
                 return ReturnException(ex);
             }
         }
+
+        [HttpPut("update-student/{id}")]
+        public async Task<IActionResult> UpdateInforStudent([FromForm] UpdateStudentDto updateStudentDto, int id)
+        {
+            try
+            {
+                var student = await _studentService.UpdateInforStudent(updateStudentDto, id);
+
+                await _context.SaveChangesAsync();
+
+                return Ok(student);
+            }
+            catch (Exception ex)
+            {
+                return ReturnException(ex);
+            }
+        }
     }
 }

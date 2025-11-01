@@ -12,5 +12,6 @@ namespace StudentActivities.src.Services.Interfaces
     {
         Task<List<Admins>> GetAllAdmin();
         Task<Admins> CreateAdmin([FromForm] CreateAdminDto createAdminDto, int userid);
+        Task<Admins> UpdateInforAdmin([FromForm] UpdateAdminDto updateAdminDto, int id);
     }
 }

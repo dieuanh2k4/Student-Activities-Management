@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using StudentActivities.src.Data;
 using StudentActivities.src.Dtos.Admins;
 using StudentActivities.src.Services.Interfaces;
@@ -36,7 +37,7 @@ namespace StudentActivities.src.Controllers
                 return ReturnException(ex);
             }
         }
-        
+
         [HttpPost("create-admin")]
         public async Task<IActionResult> CreateAdmin([FromForm] CreateAdminDto createAdminDto, int userid)
         {
@@ -48,6 +49,23 @@ namespace StudentActivities.src.Controllers
                 await _context.SaveChangesAsync();
 
                 return Ok(newAdmin);
+            }
+            catch (Exception ex)
+            {
+                return ReturnException(ex);
+            }
+        }
+
+        [HttpPut("update-admin/{id}")]
+        public async Task<IActionResult> UpdateInforAdmin([FromForm] UpdateAdminDto updateAdminDto, int id)
+        {
+            try
+            {
+                var admin = await _adminService.UpdateInforAdmin(updateAdminDto, id);
+
+                await _context.SaveChangesAsync();
+
+                return Ok(admin);
             }
             catch (Exception ex)
             {

@@ -49,9 +49,27 @@ namespace StudentActivities.src.Services.Implements
                 // Nếu đã tồn tại, ném ra một lỗi nghiệp vụ rõ ràng
                 throw new Result("Tài khoản này đã được đăng ký làm Admin.");
             }
-            
+
             var newAdmin = await createAdminDto.ToAdminsFromCreateDto(userid);
             return newAdmin;
+        }
+        
+        public async Task<Admins> UpdateInforAdmin([FromForm] UpdateAdminDto updateAdminDto, int id)
+        {
+            var admin = await _context.Admins.FindAsync(id);
+
+            if (admin == null)
+            {
+                throw new Result("Không tìm thấy người dùng cần chỉnh sửa");
+            }
+
+            admin.FirstName = updateAdminDto.FirstName;
+            admin.LastName = updateAdminDto.LastName;
+            admin.PhoneNumber = updateAdminDto.PhoneNumber;
+            admin.Birth = updateAdminDto.Birth;
+            admin.Email = updateAdminDto.Email;
+
+            return admin;
         }
     }
 }
