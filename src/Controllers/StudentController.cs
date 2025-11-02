@@ -86,5 +86,20 @@ namespace StudentActivities.src.Controllers
                 return ReturnException(ex);
             }
         }
+
+        [HttpGet("get-student-events")]
+        public async Task<IActionResult> GetStudentEvents(int studentId)
+        {
+             try
+            {
+                var studentEvents = await _studentService.GetStudentEvents(studentId);
+
+                return Ok(studentEvents);
+            }
+            catch (Exception ex)
+            {
+                return ReturnException(ex);
+            }
+        }
     }
 }

@@ -14,5 +14,6 @@ namespace StudentActivities.src.Services.Interfaces
         Task<Students> CreateStudent(CreateStudentDto createStudentDto, int userid);
         Task<Students> UpdateInforStudent([FromForm] UpdateStudentDto updateStudentDto, int id);
         Task<List<TrainingScores>> GetTrainingScore(int studentId);
+        Task<List<Events>> GetStudentEvents(int studentId);
     }
 }

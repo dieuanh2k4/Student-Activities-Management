@@ -75,7 +75,7 @@ namespace StudentActivities.src.Services.Implements
 
             return student;
         }
-        
+
         public async Task<List<TrainingScores>> GetTrainingScore(int studentId)
         {
             var trainingScores = await _context.TrainingScores
@@ -88,6 +88,25 @@ namespace StudentActivities.src.Services.Implements
             }
 
             return trainingScores;
+        }
+        
+        public async Task<List<Events>> GetStudentEvents(int studentId)
+        {
+            var eventsId = await _context.Checkins
+                .Where(c => c.StudentId == studentId)
+                .Select(c => c.EventId)
+                .ToListAsync();
+
+            if (eventsId == null || !eventsId.Any())
+            {
+                throw new Result("Sinh viên chưa tham gia sự kiện nào");
+            }
+
+            var eventsStudent = await _context.Events
+                .Where(e => eventsId.Contains(e.Id))
+                .ToListAsync();
+
+            return eventsStudent;
         }
     }
 }
