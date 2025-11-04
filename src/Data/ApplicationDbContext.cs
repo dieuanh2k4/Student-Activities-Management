@@ -25,9 +25,9 @@ namespace StudentActivities.src.Data
         public DbSet<Admins> Admins { get; set; }
         public DbSet<Organizers> Organizers { get; set; }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> dbContextOptions) : base(dbContextOptions) {}
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> dbContextOptions) : base(dbContextOptions) { }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -169,10 +169,8 @@ namespace StudentActivities.src.Data
                     .HasMaxLength(500);
                 entity.Property(n => n.SendDate)
                     .IsRequired();
-                entity.Property(n => n.ClubId)
-                    .IsRequired();
-                entity.Property(n => n.EventId)
-                    .IsRequired();
+                // ClubId và EventId là tùy chọn để hỗ trợ thông báo chỉ theo sự kiện hoặc chỉ theo CLB
+                // Không đánh dấu IsRequired để tránh vi phạm ràng buộc khi một trong hai không có.
                 entity.Property(n => n.StudentId)
                     .IsRequired();
                 entity.Property(n => n.Status)
@@ -182,12 +180,12 @@ namespace StudentActivities.src.Data
                 entity.HasOne(n => n.Events)
                     .WithMany(e => e.Notifications)
                     .HasForeignKey(n => n.EventId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.SetNull);
 
                 entity.HasOne(n => n.Clubs)
                     .WithMany(e => e.Notifications)
                     .HasForeignKey(n => n.ClubId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.SetNull);
 
                 entity.HasOne(n => n.Students)
                     .WithMany(e => e.Notifications)
@@ -247,7 +245,7 @@ namespace StudentActivities.src.Data
                     .WithOne(c => c.Resgistrations)
                     .HasForeignKey<Resgistrations>(r => r.ClubId)
                     .OnDelete(DeleteBehavior.Cascade);
-                    
+
                 entity.HasOne(r => r.Events)
                     .WithOne(e => e.Resgistrations)
                     .HasForeignKey<Resgistrations>(r => r.EventId)
@@ -317,7 +315,7 @@ namespace StudentActivities.src.Data
                     .HasMaxLength(10);
                 entity.Property(u => u.Role)
                     .IsRequired();
-                    
+
                 // entity.Property(u => u.FirstName)
                 //     .IsRequired()
                 //     .IsUnicode()
@@ -386,7 +384,7 @@ namespace StudentActivities.src.Data
                     .WithOne(u => u.Students)
                     .HasForeignKey<Students>(s => s.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
-                
+
                 entity.HasOne(s => s.AcademicClasses)
                     .WithMany(a => a.Students)
                     .HasForeignKey(s => s.AcademicClassId)
@@ -422,7 +420,7 @@ namespace StudentActivities.src.Data
                     .HasForeignKey<Admins>(a => a.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
-            
+
             modelBuilder.Entity<Organizers>(entity =>
             {
                 entity.HasKey(o => o.Id);
@@ -448,7 +446,7 @@ namespace StudentActivities.src.Data
                     .HasMaxLength(50);
                 entity.Property(u => u.UserId)
                     .IsRequired();
-                
+
                 entity.HasOne(o => o.Users)
                     .WithOne(u => u.Organizers)
                     .HasForeignKey<Organizers>(o => o.UserId)
