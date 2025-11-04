@@ -25,9 +25,9 @@ namespace StudentActivities.src.Data
         public DbSet<Admins> Admins { get; set; }
         public DbSet<Organizers> Organizers { get; set; }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> dbContextOptions) : base(dbContextOptions) {}
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> dbContextOptions) : base(dbContextOptions) { }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -236,14 +236,14 @@ namespace StudentActivities.src.Data
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(r => r.Clubs)
-                    .WithOne(c => c.Resgistrations)
-                    .HasForeignKey<Resgistrations>(r => r.ClubId)
-                    .OnDelete(DeleteBehavior.Cascade);
-                    
+                    .WithMany(c => c.Registrations)
+                    .HasForeignKey(r => r.ClubId)
+                    .OnDelete(DeleteBehavior.Restrict); // ← Không tự động xóa
+
                 entity.HasOne(r => r.Events)
-                    .WithOne(e => e.Resgistrations)
-                    .HasForeignKey<Resgistrations>(r => r.EventId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .WithMany(e => e.Registrations)
+                    .HasForeignKey(r => r.EventId)
+                    .OnDelete(DeleteBehavior.Restrict); // ← Không tự động xóa
             });
 
             modelBuilder.Entity<Semester>(entity =>
@@ -309,7 +309,7 @@ namespace StudentActivities.src.Data
                     .HasMaxLength(10);
                 entity.Property(u => u.Role)
                     .IsRequired();
-                    
+
                 // entity.Property(u => u.FirstName)
                 //     .IsRequired()
                 //     .IsUnicode()
@@ -376,7 +376,7 @@ namespace StudentActivities.src.Data
                     .WithOne(u => u.Students)
                     .HasForeignKey<Students>(s => s.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
-                
+
                 entity.HasOne(s => s.AcademicClasses)
                     .WithMany(a => a.Students)
                     .HasForeignKey(s => s.AcademicClassId)
@@ -412,7 +412,7 @@ namespace StudentActivities.src.Data
                     .HasForeignKey<Admins>(a => a.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
-            
+
             modelBuilder.Entity<Organizers>(entity =>
             {
                 entity.HasKey(o => o.Id);
@@ -436,7 +436,7 @@ namespace StudentActivities.src.Data
                 entity.Property(u => u.Email)
                     .IsRequired()
                     .HasMaxLength(50);
-                
+
                 entity.HasOne(o => o.Users)
                     .WithOne(u => u.Organizers)
                     .HasForeignKey<Organizers>(o => o.UserId)
