@@ -10,8 +10,8 @@ namespace StudentActivities.src.Models
         public int Id { get; set; }
         public string? Context { get; set; }
         public DateOnly SendDate { get; set; }
-        public int EventId { get; set; }
-        public int ClubId { get; set; }
+        public int? EventId { get; set; }
+        public int? ClubId { get; set; }
         public int StudentId { get; set; }
         public string? Status { get; set; } = "Chưa đọc";
 
