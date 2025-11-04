@@ -235,14 +235,13 @@ namespace StudentActivities.src.Data
                     .IsRequired();
                 entity.Property(r => r.Status)
                     .IsRequired()
-                    .HasMaxLength(100);
-                entity.Property(r => r.DateResgistered)
+                    .HasMaxLength(20);
+                entity.Property(r => r.Type)
+                    .IsRequired()
+                    .HasMaxLength(10);
+                entity.Property(r => r.RegistrationDate)
                     .IsRequired();
                 entity.Property(r => r.StudentId)
-                    .IsRequired();
-                entity.Property(r => r.ClubId)
-                    .IsRequired();
-                entity.Property(r => r.EventId)
                     .IsRequired();
 
                 entity.HasOne(r => r.Students)
@@ -256,9 +255,9 @@ namespace StudentActivities.src.Data
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(r => r.Events)
-                    .WithOne(e => e.Resgistrations)
-                    .HasForeignKey<Resgistrations>(r => r.EventId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .WithMany(e => e.Resgistrations)
+                    .HasForeignKey(r => r.EventId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Semester>(entity =>

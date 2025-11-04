@@ -45,6 +45,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IOrganizerService, OrganizerService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IResgistrationService, ResgistrationService>();
 
 // Checkin Service
 builder.Services.AddScoped<ICheckinService, CheckinService>();
