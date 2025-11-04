@@ -1,3 +1,5 @@
+using System;
+
 namespace StudentActivities.src.Dtos.Clubs
 {
     public class UpdateClubDto

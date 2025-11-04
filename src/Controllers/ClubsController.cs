@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using StudentActivities.src.Dtos.Clubs;
 using StudentActivities.src.Services.Interfaces;
@@ -20,6 +21,9 @@ namespace StudentActivities.src.Controllers
         {
             var item = await _svc.GetByIdAsync(id);
             return item == null ? NotFound() : Ok(item);
+        public ClubsController(IClubService svc)
+        {
+            _svc = svc;
         }
 
         [HttpPost]
@@ -36,5 +40,35 @@ namespace StudentActivities.src.Controllers
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
             => await _svc.DeleteAsync(id) ? NoContent() : NotFound();
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var list = await _svc.GetAllAsync();
+            return Ok(list);
+        }
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var item = await _svc.GetByIdAsync(id);
+            if (item == null) return NotFound();
+            return Ok(item);
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateClubDto dto)
+        {
+            var ok = await _svc.UpdateAsync(id, dto);
+            if (!ok) return NotFound();
+            return NoContent();
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var ok = await _svc.DeleteAsync(id);
+            if (!ok) return NotFound();
+            return NoContent();
+        }
     }
 }

@@ -1,19 +1,23 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using StudentActivities.src.Data;
 using StudentActivities.src.Dtos.Clubs;
 using StudentActivities.src.Mappers;
 using StudentActivities.src.Models;
 using StudentActivities.src.Services.Interfaces;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace StudentActivities.src.Services.Implements
 {
     public class ClubService : IClubService
     {
         private readonly ApplicationDbContext _context;
-        public ClubService(ApplicationDbContext context) => _context = context;
+
+        public ClubService(ApplicationDbContext context)
+        {
+            _context = context;
+        }
 
         public async Task<ClubDto> CreateAsync(CreateClubDto dto)
         {

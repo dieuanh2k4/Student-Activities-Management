@@ -13,8 +13,8 @@ namespace StudentActivities.src.Models
         public string? PhoneNumber { get; set; }
         public DateOnly Birth { get; set; }
         public string? Email { get; set; }
-        public int ClubId { get; set; }
-        public int EventId { get; set; }
+        // public int ClubId { get; set; }
+        // public int EventId { get; set; }
         public int UserId { get; set; }
 
         public Users? Users { get; set; }

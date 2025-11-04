@@ -61,8 +61,10 @@ namespace StudentActivities.src.Data
                 entity.Property(c => c.EventId)
                     .IsRequired();
                 entity.Property(c => c.Status)
-                    .HasMaxLength(10)
+                    .HasMaxLength(20)
                     .IsRequired();
+                entity.Property(c => c.CheckInTime);
+                entity.Property(c => c.CheckedInBy);
 
                 entity.HasOne(c => c.Students)
                     .WithOne(s => s.Checkin)
@@ -73,6 +75,11 @@ namespace StudentActivities.src.Data
                     .WithOne(e => e.Checkin)
                     .HasForeignKey<Checkin>(c => c.EventId)
                     .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(c => c.CheckedInByUser)
+                    .WithMany()
+                    .HasForeignKey(c => c.CheckedInBy)
+                    .OnDelete(DeleteBehavior.SetNull);
             });
 
             modelBuilder.Entity<Clubs>(entity =>
@@ -114,9 +121,17 @@ namespace StudentActivities.src.Data
                 entity.Property(e => e.Thumbnail)
                     .IsRequired()
                     .HasMaxLength(500);
+                entity.Property(e => e.Paticipants)
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .IsUnicode();
                 entity.Property(e => e.Description)
                     .IsRequired()
                     .HasMaxLength(1000)
+                    .IsUnicode();
+                entity.Property(e => e.DetailDescription)
+                    .IsRequired()
+                    .HasMaxLength(2000)
                     .IsUnicode();
                 entity.Property(e => e.StartDate)
                     .IsRequired();
@@ -161,10 +176,8 @@ namespace StudentActivities.src.Data
                     .HasMaxLength(500);
                 entity.Property(n => n.SendDate)
                     .IsRequired();
-                entity.Property(n => n.ClubId)
-                    .IsRequired();
-                entity.Property(n => n.EventId)
-                    .IsRequired();
+                // ClubId và EventId là tùy chọn để hỗ trợ thông báo chỉ theo sự kiện hoặc chỉ theo CLB
+                // Không đánh dấu IsRequired để tránh vi phạm ràng buộc khi một trong hai không có.
                 entity.Property(n => n.StudentId)
                     .IsRequired();
                 entity.Property(n => n.Status)
@@ -174,12 +187,12 @@ namespace StudentActivities.src.Data
                 entity.HasOne(n => n.Events)
                     .WithMany(e => e.Notifications)
                     .HasForeignKey(n => n.EventId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.SetNull);
 
                 entity.HasOne(n => n.Clubs)
                     .WithMany(e => e.Notifications)
                     .HasForeignKey(n => n.ClubId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.SetNull);
 
                 entity.HasOne(n => n.Students)
                     .WithMany(e => e.Notifications)
@@ -220,14 +233,13 @@ namespace StudentActivities.src.Data
                     .IsRequired();
                 entity.Property(r => r.Status)
                     .IsRequired()
-                    .HasMaxLength(100);
-                entity.Property(r => r.DateResgistered)
+                    .HasMaxLength(20);
+                entity.Property(r => r.Type)
+                    .IsRequired()
+                    .HasMaxLength(10);
+                entity.Property(r => r.RegistrationDate)
                     .IsRequired();
                 entity.Property(r => r.StudentId)
-                    .IsRequired();
-                entity.Property(r => r.ClubId)
-                    .IsRequired();
-                entity.Property(r => r.EventId)
                     .IsRequired();
 
                 entity.HasOne(r => r.Students)
@@ -355,6 +367,8 @@ namespace StudentActivities.src.Data
                 //     .HasMaxLength(20);
                 entity.Property(s => s.AcademicClassId)
                     .IsRequired();
+                entity.Property(s => s.FacultyId)
+                    .IsRequired();
                 entity.Property(u => u.FirstName)
                     .IsRequired()
                     .IsUnicode()
@@ -436,6 +450,8 @@ namespace StudentActivities.src.Data
                 entity.Property(u => u.Email)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(u => u.UserId)
+                    .IsRequired();
 
                 entity.HasOne(o => o.Users)
                     .WithOne(u => u.Organizers)

@@ -27,6 +27,7 @@ namespace StudentActivities.src.Mappers
                 CurrentMembers = c.Registrations?.Count ?? 0,
                 OrganizerId = c.OrganizerId,
                 OrganizerName = organizerName ?? "Không xác định"
+                OrganizerId = c.OrganizerId
             };
         }
     }
