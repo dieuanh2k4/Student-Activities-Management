@@ -14,10 +14,16 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Cấu hình UTC cho toàn bộ ứng dụng
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IClubService, ClubService>();
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
@@ -26,13 +32,15 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 // Database Context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
+        npgsqlOptions => npgsqlOptions.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
 });
 
 // Core Services
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IClubService, ClubService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<INotificationService, NotificationService>();
 
 // Academic Management Services
 builder.Services.AddScoped<IFacultyService, FacultyService>();
@@ -49,6 +57,10 @@ builder.Services.AddScoped<IResgistrationService, ResgistrationService>();
 
 // Checkin Service
 builder.Services.AddScoped<ICheckinService, CheckinService>();
+
+// Background Services
+// Đã sửa lỗi DateTime UTC - bật lại Background Service
+builder.Services.AddHostedService<StudentActivities.src.BackgroundServices.EventReminderService>();
 
 // JWT Configuration
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -94,8 +106,6 @@ builder.Services.AddSingleton<IHtmlSanitizer>(provider =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-// Force development environment to show Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
 
@@ -107,6 +117,25 @@ app.UseAuthorization();
 // app.UseHttpsRedirection();
 
 app.MapControllers();
+
+// Tự động mở Swagger UI khi chạy ứng dụng trong Development
+if (app.Environment.IsDevelopment())
+{
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    try
+    {
+        var url = "http://localhost:5172/swagger";
+        System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+        {
+            FileName = url,
+            UseShellExecute = true
+        });
+    }
+    catch (Exception ex)
+    {
+        logger.LogWarning($"Không thể tự động mở browser: {ex.Message}");
+    }
+}
 
 app.Run();
 

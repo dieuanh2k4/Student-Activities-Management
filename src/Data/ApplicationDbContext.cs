@@ -176,10 +176,8 @@ namespace StudentActivities.src.Data
                     .HasMaxLength(500);
                 entity.Property(n => n.SendDate)
                     .IsRequired();
-                entity.Property(n => n.ClubId)
-                    .IsRequired();
-                entity.Property(n => n.EventId)
-                    .IsRequired();
+                // ClubId và EventId là tùy chọn để hỗ trợ thông báo chỉ theo sự kiện hoặc chỉ theo CLB
+                // Không đánh dấu IsRequired để tránh vi phạm ràng buộc khi một trong hai không có.
                 entity.Property(n => n.StudentId)
                     .IsRequired();
                 entity.Property(n => n.Status)
@@ -189,12 +187,12 @@ namespace StudentActivities.src.Data
                 entity.HasOne(n => n.Events)
                     .WithMany(e => e.Notifications)
                     .HasForeignKey(n => n.EventId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.SetNull);
 
                 entity.HasOne(n => n.Clubs)
                     .WithMany(e => e.Notifications)
                     .HasForeignKey(n => n.ClubId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.SetNull);
 
                 entity.HasOne(n => n.Students)
                     .WithMany(e => e.Notifications)
@@ -250,14 +248,14 @@ namespace StudentActivities.src.Data
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(r => r.Clubs)
-                    .WithMany(c => c.Resgistrations)
+                    .WithMany(c => c.Registrations)
                     .HasForeignKey(r => r.ClubId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Restrict); // ← Không tự động xóa
 
                 entity.HasOne(r => r.Events)
-                    .WithMany(e => e.Resgistrations)
+                    .WithMany(e => e.Registrations)
                     .HasForeignKey(r => r.EventId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Restrict); // ← Không tự động xóa
             });
 
             modelBuilder.Entity<Semester>(entity =>

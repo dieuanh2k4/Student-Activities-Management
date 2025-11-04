@@ -1,6 +1,6 @@
+using StudentActivities.src.Dtos.Clubs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using StudentActivities.src.Dtos.Clubs;
 
 namespace StudentActivities.src.Services.Interfaces
 {

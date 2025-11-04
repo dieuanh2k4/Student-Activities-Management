@@ -11,6 +11,16 @@ namespace StudentActivities.src.Controllers
     {
         private readonly IClubService _svc;
 
+        public ClubsController(IClubService svc) => _svc = svc;
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll() => Ok(await _svc.GetAllAsync());
+
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var item = await _svc.GetByIdAsync(id);
+            return item == null ? NotFound() : Ok(item);
         public ClubsController(IClubService svc)
         {
             _svc = svc;
@@ -23,6 +33,13 @@ namespace StudentActivities.src.Controllers
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateClubDto dto)
+            => await _svc.UpdateAsync(id, dto) ? NoContent() : NotFound();
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
+            => await _svc.DeleteAsync(id) ? NoContent() : NotFound();
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {

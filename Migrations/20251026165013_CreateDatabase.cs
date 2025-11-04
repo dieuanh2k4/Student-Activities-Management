@@ -269,8 +269,8 @@ namespace StudentActivities.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Context = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     SendDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    EventId = table.Column<int>(type: "integer", nullable: false),
-                    ClubId = table.Column<int>(type: "integer", nullable: false),
+                    EventId = table.Column<int>(type: "integer", nullable: true),
+                    ClubId = table.Column<int>(type: "integer", nullable: true),
                     StudentId = table.Column<int>(type: "integer", nullable: false),
                     Status = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false)
                 },
@@ -282,13 +282,13 @@ namespace StudentActivities.Migrations
                         column: x => x.ClubId,
                         principalTable: "Clubs",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Notifications_Events_EventId",
                         column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Notifications_Students_StudentId",
                         column: x => x.StudentId,

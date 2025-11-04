@@ -29,31 +29,33 @@ namespace StudentActivities.src.Services.Implements
                 MaxCapacity = dto.MaxCapacity,
                 OrganizerId = dto.OrganizerId
             };
-
             _context.Clubs.Add(entity);
             await _context.SaveChangesAsync();
-
             return ClubsMapper.ToDto(entity);
         }
 
         public async Task<List<ClubDto>> GetAllAsync()
         {
             var list = await _context.Clubs
-                                     .AsNoTracking()
-                                     .OrderBy(c => c.Name)
-                                     .ToListAsync();
+                .AsNoTracking()
+                .Include(c => c.Organizers)
+                .ToListAsync();
             return list.Select(ClubsMapper.ToDto).ToList();
         }
 
+        // ĐÃ SỬA: Thêm Include(c => c.Organizers)
         public async Task<ClubDto?> GetByIdAsync(int id)
         {
-            var c = await _context.Clubs.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+            var c = await _context.Clubs
+                .AsNoTracking()
+                .Include(c => c.Organizers)  // THÊM DÒNG NÀY
+                .FirstOrDefaultAsync(x => x.Id == id);
             return c == null ? null : ClubsMapper.ToDto(c);
         }
 
         public async Task<bool> UpdateAsync(int id, UpdateClubDto dto)
         {
-            var entity = await _context.Clubs.FirstOrDefaultAsync(c => c.Id == id);
+            var entity = await _context.Clubs.FirstOrDefaultAsync(x => x.Id == id);
             if (entity == null) return false;
 
             if (dto.Name != null) entity.Name = dto.Name;
@@ -62,14 +64,13 @@ namespace StudentActivities.src.Services.Implements
             if (dto.MaxCapacity.HasValue) entity.MaxCapacity = dto.MaxCapacity.Value;
             if (dto.OrganizerId.HasValue) entity.OrganizerId = dto.OrganizerId.Value;
 
-            _context.Clubs.Update(entity);
             await _context.SaveChangesAsync();
             return true;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var entity = await _context.Clubs.FirstOrDefaultAsync(c => c.Id == id);
+            var entity = await _context.Clubs.FirstOrDefaultAsync(x => x.Id == id);
             if (entity == null) return false;
             _context.Clubs.Remove(entity);
             await _context.SaveChangesAsync();
