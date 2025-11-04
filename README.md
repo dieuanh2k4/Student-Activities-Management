@@ -8,6 +8,7 @@ Hệ thống quản lý hoạt động sinh viên được xây dựng bằng AS
 - ✅ **User Management**: Quản lý người dùng (Admin, Student, Organizer)
 - ✅ **Events Management**: Quản lý sự kiện và hoạt động
 - ✅ **Clubs Management**: Quản lý câu lạc bộ sinh viên
+- ✅ **Checkin Management**: Quản lý điểm danh sự kiện (Manual Check-in)
 - ✅ **Database Integration**: PostgreSQL với Entity Framework Core
 - ✅ **API Documentation**: Swagger/OpenAPI
 - ✅ **Clean Architecture**: Tách biệt rõ ràng các layer
@@ -90,6 +91,14 @@ dotnet watch run
 - `GET/POST/PUT/DELETE /api/events` - Quản lý sự kiện
 - `GET/POST/PUT/DELETE /api/clubs` - Quản lý câu lạc bộ
 
+### **Checkin Management** (NEW! ✨)
+- `GET /api/events/{eventId}/checkin/registrations` - Danh sách sinh viên đăng ký
+- `GET /api/events/{eventId}/checkin` - Trạng thái check-in
+- `PUT /api/events/{eventId}/checkin/{studentId}` - Check-in thủ công
+- `GET /api/events/{eventId}/checkin/search` - Tìm kiếm sinh viên
+- `GET /api/events/{eventId}/checkin/statistics` - Thống kê check-in
+- `POST /api/events/{eventId}/checkin/bulk` - Check-in hàng loạt (Admin)
+
 ## 📁 **Project Structure**
 ```
 src/
@@ -119,6 +128,10 @@ src/
 - [Project Overview](PROJECT_OVERVIEW.md)
 - [Academic Management Implementation Guide](IMPLEMENTATION_GUIDE_ACADEMIC_MANAGEMENT.md)
 - [Git/GitHub Guide](GIT_GITHUB_GUIDE.md)
+- [Checkin Feature - Implementation Summary](CHECKIN_IMPLEMENTATION_SUMMARY.md) ⭐ NEW
+- [Checkin Feature - API Documentation](API_DOCUMENTATION_CHECKIN.md) ⭐ NEW
+- [Checkin Feature - Usage Guide](CHECKIN_USAGE_GUIDE.md) ⭐ NEW
+- [Checkin Feature - Migration Guide](MIGRATION_CHECKIN.md) ⭐ NEW
 
 ## 📞 **Support**
 - **Issues**: [GitHub Issues](https://github.com/dieuanh2k4/Student-Activities-Management/issues)
