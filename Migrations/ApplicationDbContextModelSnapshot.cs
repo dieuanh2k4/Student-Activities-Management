@@ -128,6 +128,9 @@ namespace StudentActivities.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("CurrentRegistrations")
+                        .HasColumnType("integer");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
@@ -146,10 +149,16 @@ namespace StudentActivities.Migrations
                     b.Property<int>("OrganizerId")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime>("RegistrationEndDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("Thumbnail")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
+
+                    b.Property<decimal>("TrainingPoints")
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
@@ -207,6 +216,9 @@ namespace StudentActivities.Migrations
                         .IsUnicode(true)
                         .HasColumnType("character varying(500)");
 
+                    b.Property<DateTime>("RegistrationEndDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("timestamp with time zone");
 
@@ -214,6 +226,9 @@ namespace StudentActivities.Migrations
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
+
+                    b.Property<decimal>("TrainingPoints")
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 
@@ -362,30 +377,45 @@ namespace StudentActivities.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ClubId")
+                    b.Property<DateTime?>("CancellationTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("CheckInTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("ClubId")
                         .HasColumnType("integer");
 
-                    b.Property<DateOnly>("DateResgistered")
-                        .HasColumnType("date");
-
-                    b.Property<int>("EventId")
+                    b.Property<int?>("EventId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("text");
+
+                    b.Property<decimal?>("PointsEarned")
+                        .HasColumnType("numeric");
+
+                    b.Property<DateTime>("RegistrationDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ClubId")
-                        .IsUnique();
+                    b.HasIndex("ClubId");
 
-                    b.HasIndex("EventId")
-                        .IsUnique();
+                    b.HasIndex("EventId");
 
                     b.HasIndex("StudentId");
 
@@ -657,16 +687,14 @@ namespace StudentActivities.Migrations
             modelBuilder.Entity("StudentActivities.src.Models.Resgistrations", b =>
                 {
                     b.HasOne("StudentActivities.src.Models.Clubs", "Clubs")
-                        .WithOne("Resgistrations")
-                        .HasForeignKey("StudentActivities.src.Models.Resgistrations", "ClubId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Resgistrations")
+                        .HasForeignKey("ClubId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("StudentActivities.src.Models.Events", "Events")
-                        .WithOne("Resgistrations")
-                        .HasForeignKey("StudentActivities.src.Models.Resgistrations", "EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Resgistrations")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("StudentActivities.src.Models.Students", "Students")
                         .WithMany("Resgistrations")
