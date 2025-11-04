@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Mvc;
 using StudentActivities.src.Services.Interfaces;
 using System.Security.Claims;
 using StudentActivities.src.Dtos.Events;
-using StudentActivities.src.Dtos.Clubs;
+// using StudentActivities.src.Dtos.Clubs;
+// using StudentActivities.src.Dtos.Organizers;
+
 
 
 namespace StudentActivities.src.Controllers
@@ -13,11 +15,13 @@ namespace StudentActivities.src.Controllers
     {
         private readonly IEventService _eventSvc;
         private readonly IClubService _clubSvc;
+        private readonly IOrganizerService _organizer;
 
-        public OrganizerController(IEventService eventSvc, IClubService clubSvc)
+        public OrganizerController(IEventService eventSvc, IClubService clubSvc, IOrganizerService organizerService)
         {
             _eventSvc = eventSvc;
             _clubSvc = clubSvc;
+            _organizer = organizerService;
         }
 
         private int GetOrganizerId()

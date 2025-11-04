@@ -26,7 +26,7 @@ namespace StudentActivities.src.Mappers
                 MaxCapacity = c.MaxCapacity,
                 CurrentMembers = c.Registrations?.Count ?? 0,
                 OrganizerId = c.OrganizerId,
-                OrganizerName = organizerName ?? "Không xác định"
+                OrganizerName = organizerName ?? "Không xác định",
                 OrganizerId = c.OrganizerId
             };
         }
