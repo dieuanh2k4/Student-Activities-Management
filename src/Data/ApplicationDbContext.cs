@@ -250,9 +250,9 @@ namespace StudentActivities.src.Data
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(r => r.Clubs)
-                    .WithOne(c => c.Resgistrations)
-                    .HasForeignKey<Resgistrations>(r => r.ClubId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .WithMany(c => c.Resgistrations)
+                    .HasForeignKey(r => r.ClubId)
+                    .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(r => r.Events)
                     .WithMany(e => e.Resgistrations)
