@@ -18,6 +18,8 @@ namespace StudentActivities.src.Models
         public string? Location { get; set; } // địa điểm
         public int MaxCapacity { get; set; } // số người tham gia
         public int CurrentRegistrations { get; set; } // số người đăng kí hiện tại
+        public DateTime RegistrationEndDate { get; set; } // Hạn chót đăng ký
+        public decimal TrainingPoints { get; set; } // Điểm rèn luyện
         public string? Status
         {
             get
@@ -31,7 +33,7 @@ namespace StudentActivities.src.Models
         public int OrganizerId { get; set; }
 
         public Organizers? Organizers { get; set; }
-        public Resgistrations? Resgistrations { get; set; }
+        public List<Resgistrations>? Resgistrations { get; set; }
         public List<Notifications>? Notifications { get; set; }
         public TrainingScores? TrainingScores { get; set; }
         public Checkin? Checkin { get; set; }
