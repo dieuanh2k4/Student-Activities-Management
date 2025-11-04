@@ -21,6 +21,9 @@ AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", false);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IClubService, ClubService>();
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;

@@ -248,14 +248,14 @@ namespace StudentActivities.src.Data
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(r => r.Clubs)
-                    .WithOne(c => c.Resgistrations)
-                    .HasForeignKey<Resgistrations>(r => r.ClubId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .WithMany(c => c.Registrations)
+                    .HasForeignKey(r => r.ClubId)
+                    .OnDelete(DeleteBehavior.Restrict); // ← Không tự động xóa
 
                 entity.HasOne(r => r.Events)
-                    .WithMany(e => e.Resgistrations)
+                    .WithMany(e => e.Registrations)
                     .HasForeignKey(r => r.EventId)
-                    .OnDelete(DeleteBehavior.Restrict);
+                    .OnDelete(DeleteBehavior.Restrict); // ← Không tự động xóa
             });
 
             modelBuilder.Entity<Semester>(entity =>
