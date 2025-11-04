@@ -12,6 +12,7 @@ namespace StudentActivities.src.Services.Implements
 {
     public class OrganizerService : IOrganizerService
     {
+        private static readonly List<Organizers> _organizer = new List<Organizers>();
         private readonly ApplicationDbContext _context;
 
         public OrganizerService(ApplicationDbContext context)

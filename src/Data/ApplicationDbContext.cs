@@ -114,9 +114,17 @@ namespace StudentActivities.src.Data
                 entity.Property(e => e.Thumbnail)
                     .IsRequired()
                     .HasMaxLength(500);
+                entity.Property(e => e.Paticipants)
+                    .IsRequired()
+                    .HasMaxLength(500)
+                    .IsUnicode();
                 entity.Property(e => e.Description)
                     .IsRequired()
                     .HasMaxLength(1000)
+                    .IsUnicode();
+                entity.Property(e => e.DetailDescription)
+                    .IsRequired()
+                    .HasMaxLength(2000)
                     .IsUnicode();
                 entity.Property(e => e.StartDate)
                     .IsRequired();
@@ -220,14 +228,13 @@ namespace StudentActivities.src.Data
                     .IsRequired();
                 entity.Property(r => r.Status)
                     .IsRequired()
-                    .HasMaxLength(100);
-                entity.Property(r => r.DateResgistered)
+                    .HasMaxLength(20);
+                entity.Property(r => r.Type)
+                    .IsRequired()
+                    .HasMaxLength(10);
+                entity.Property(r => r.RegistrationDate)
                     .IsRequired();
                 entity.Property(r => r.StudentId)
-                    .IsRequired();
-                entity.Property(r => r.ClubId)
-                    .IsRequired();
-                entity.Property(r => r.EventId)
                     .IsRequired();
 
                 entity.HasOne(r => r.Students)
@@ -236,14 +243,14 @@ namespace StudentActivities.src.Data
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(r => r.Clubs)
-                    .WithOne(c => c.Resgistrations)
-                    .HasForeignKey<Resgistrations>(r => r.ClubId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .WithMany(c => c.Resgistrations)
+                    .HasForeignKey(r => r.ClubId)
+                    .OnDelete(DeleteBehavior.Restrict);
                     
                 entity.HasOne(r => r.Events)
-                    .WithOne(e => e.Resgistrations)
-                    .HasForeignKey<Resgistrations>(r => r.EventId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .WithMany(e => e.Resgistrations)
+                    .HasForeignKey(r => r.EventId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             modelBuilder.Entity<Semester>(entity =>
@@ -355,6 +362,8 @@ namespace StudentActivities.src.Data
                 //     .HasMaxLength(20);
                 entity.Property(s => s.AcademicClassId)
                     .IsRequired();
+                entity.Property(s => s.FacultyId)
+                    .IsRequired();
                 entity.Property(u => u.FirstName)
                     .IsRequired()
                     .IsUnicode()
@@ -436,6 +445,8 @@ namespace StudentActivities.src.Data
                 entity.Property(u => u.Email)
                     .IsRequired()
                     .HasMaxLength(50);
+                entity.Property(u => u.UserId)
+                    .IsRequired();
                 
                 entity.HasOne(o => o.Users)
                     .WithOne(u => u.Organizers)

@@ -15,6 +15,7 @@ namespace StudentActivities.src.Models
         public string? Email { get; set; }
         public int UserId { get; set; }
         public int AcademicClassId { get; set; }
+        public int FacultyId { get; set; }
         public int TrainingScore { get; set; }
 
         public Users? Users { get; set; }
