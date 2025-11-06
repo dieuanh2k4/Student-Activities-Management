@@ -14,7 +14,6 @@ namespace StudentActivities.src.Services.Implements
 {
     public class OrganizerService : IOrganizerService
     {
-        private static readonly List<Organizers> _organizer = new List<Organizers>();
         private readonly ApplicationDbContext _context;
 
         public OrganizerService(ApplicationDbContext context)
@@ -45,11 +44,14 @@ namespace StudentActivities.src.Services.Implements
             }
 
             var newOrganizer = await createOrganizerDto.ToOrganizerFromCreateDto(userid);
+
+            await _context.Organizers.AddAsync(newOrganizer);
+            await _context.SaveChangesAsync();
             return newOrganizer;
 
         }
-        
-        public async Task<Organizers> UpdateInforOrganizer([FromForm] UpdateOrganizerDto updateOrganizerDto, int id)
+
+        public async Task<Organizers> UpdateInforOrganizer(UpdateOrganizerDto updateOrganizerDto, int id)
         {
             var organizer = await _context.Organizers.FindAsync(id);
 
@@ -64,6 +66,8 @@ namespace StudentActivities.src.Services.Implements
             organizer.Birth = updateOrganizerDto.Birth;
             organizer.Email = updateOrganizerDto.Email;
 
+            await _context.SaveChangesAsync();
+
             return organizer;
         }
 
@@ -73,9 +77,9 @@ namespace StudentActivities.src.Services.Implements
             var organizer = await _context.Organizers
                 .AsNoTracking()
                 .Include(o => o.Clubs!)
-                    .ThenInclude(c => c.Registrations)
+                    .ThenInclude(c => c.Resgistrations)
                 .Include(o => o.Events!)
-                    .ThenInclude(ev => ev.Registrations)
+                    .ThenInclude(ev => ev.Resgistrations)
                 .FirstOrDefaultAsync(o => o.Id == organizerId);
 
             if (organizer == null) return null;
@@ -84,13 +88,15 @@ namespace StudentActivities.src.Services.Implements
             {
 
                 Clubs = organizer.Clubs?.Select(ClubsMapper.ToSummaryDto).ToList() ?? new List<ClubSummaryDto>(),
+
+
                 Events = organizer.Events?.Select(e => new EventSummaryDto
                 {
                     Id = e.Id,
                     Name = e.Name,
                     StartDate = e.StartDate,
                     Location = e.Location,
-                    CurrentRegistrations = e.Registrations?.Count ?? 0,
+                    CurrentRegistrations = e.Resgistrations?.Count ?? 0,
                     MaxCapacity = e.MaxCapacity,
                     Status = e.Status
                 }).ToList() ?? new List<EventSummaryDto>()
@@ -113,7 +119,6 @@ namespace StudentActivities.src.Services.Implements
             if (dto.Location != null) @event.Location = dto.Location;
             if (dto.MaxCapacity.HasValue) @event.MaxCapacity = dto.MaxCapacity.Value;
 
-            @event.UpdateDate = DateTime.Now;
             await _context.SaveChangesAsync();
             return true;
         }

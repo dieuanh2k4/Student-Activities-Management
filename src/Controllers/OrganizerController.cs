@@ -2,9 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 using StudentActivities.src.Services.Interfaces;
 using System.Security.Claims;
 using StudentActivities.src.Dtos.Events;
-// using StudentActivities.src.Dtos.Clubs;
-// using StudentActivities.src.Dtos.Organizers;
-
+using StudentActivities.src.Dtos.Clubs;
+using StudentActivities.src.Dtos.Organizers;
+using StudentActivities.src.Data;
+using System;
 
 
 namespace StudentActivities.src.Controllers
@@ -17,11 +18,20 @@ namespace StudentActivities.src.Controllers
         private readonly IClubService _clubSvc;
         private readonly IOrganizerService _organizer;
 
-        public OrganizerController(IEventService eventSvc, IClubService clubSvc, IOrganizerService organizerService)
+        private readonly ApplicationDbContext _context;
+
+        public OrganizerController(IEventService eventSvc, IClubService clubSvc,
+    IOrganizerService organizerService, ApplicationDbContext context)
         {
             _eventSvc = eventSvc;
             _clubSvc = clubSvc;
             _organizer = organizerService;
+            _context = context;
+        }
+
+        private IActionResult ReturnException(Exception ex)
+        {
+            return StatusCode(500, new { error = ex.Message });
         }
 
         private int GetOrganizerId()
@@ -104,7 +114,7 @@ namespace StudentActivities.src.Controllers
             }
             catch (Exception ex)
             {
-                return ReturnException(ex);
+                return StatusCode(500, new { error = ex.Message });
             }
         }
 
@@ -114,15 +124,11 @@ namespace StudentActivities.src.Controllers
             try
             {
                 var newOrganizer = await _organizer.CreateOrganizer(createOrganizerDto, userid);
-
-                await _context.Organizers.AddAsync(newOrganizer);
-                await _context.SaveChangesAsync();
-
                 return Ok(newOrganizer);
             }
             catch (Exception ex)
             {
-                return ReturnException(ex);
+                return StatusCode(500, new { error = ex.Message });
             }
         }
 
@@ -132,14 +138,11 @@ namespace StudentActivities.src.Controllers
             try
             {
                 var organizer = await _organizer.UpdateInforOrganizer(updateOrganizerDto, id);
-
-                await _context.SaveChangesAsync();
-
                 return Ok(organizer);
             }
             catch (Exception ex)
             {
-                return ReturnException(ex);
+                return StatusCode(500, new { error = ex.Message });
             }
         }
     }
