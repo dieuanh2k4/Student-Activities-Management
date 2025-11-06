@@ -1,5 +1,5 @@
-// src/Mappers/ClubsMapper.cs
 using StudentActivities.src.Dtos.Clubs;
+using StudentActivities.src.Dtos.Organizers;  // <-- THÊM DÒNG NÀY
 using StudentActivities.src.Models;
 
 namespace StudentActivities.src.Mappers
@@ -10,7 +10,6 @@ namespace StudentActivities.src.Mappers
         {
             if (c == null) return null!;
 
-            // Ghép FirstName + LastName thành FullName
             string? organizerName = null;
             if (c.Organizers != null)
             {
@@ -24,10 +23,21 @@ namespace StudentActivities.src.Mappers
                 Thumbnail = c.Thumbnail,
                 Description = c.Description,
                 MaxCapacity = c.MaxCapacity,
-                CurrentMembers = c.Registrations?.Count ?? 0,
+                CurrentMembers = c.Resgistrations?.Count ?? 0,
                 OrganizerId = c.OrganizerId,
-                OrganizerName = organizerName ?? "Không xác định"
-                OrganizerId = c.OrganizerId
+                OrganizerName = organizerName ?? "Không xác định",
+            };
+        }
+
+        public static ClubSummaryDto ToSummaryDto(Clubs c)
+        {
+            if (c == null) return null!;
+            return new ClubSummaryDto
+            {
+                Id = c.Id,
+                Name = c.Name,
+                Thumbnail = c.Thumbnail,
+                MemberCount = c.Resgistrations?.Count ?? 0
             };
         }
     }
