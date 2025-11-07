@@ -1,0 +1,32 @@
+services:
+  server:
+    build: .
+    ports:
+      - "8081:8080"
+    environment:
+      ASPNETCORE_ENVIROMENT: Development
+      ConnectionStrings__DefaultConnection: "Host=database;Port=5432;Database=postgres;Username=StudentActivities;Password=${DB_PASSWORD}"
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: unless-stopped
+
+  database:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: StudentActivities
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U StudentActivities -d postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  postgres-data:

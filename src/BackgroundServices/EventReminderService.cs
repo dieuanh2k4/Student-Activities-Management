@@ -18,6 +18,9 @@ namespace StudentActivities.src.BackgroundServices
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            // Đợi 10 giây để đảm bảo migrations đã hoàn tất
+            await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+            
             while (!stoppingToken.IsCancellationRequested)
             {
                 try

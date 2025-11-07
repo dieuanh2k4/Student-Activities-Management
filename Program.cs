@@ -59,8 +59,8 @@ builder.Services.AddScoped<IResgistrationService, ResgistrationService>();
 builder.Services.AddScoped<ICheckinService, CheckinService>();
 
 // Background Services
-// Đã sửa lỗi DateTime UTC - bật lại Background Service
-builder.Services.AddHostedService<StudentActivities.src.BackgroundServices.EventReminderService>();
+// Tạm thời tắt để tránh lỗi khi chạy migrations
+// builder.Services.AddHostedService<StudentActivities.src.BackgroundServices.EventReminderService>();
 
 // JWT Configuration
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -105,6 +105,22 @@ builder.Services.AddSingleton<IHtmlSanitizer>(provider =>
 });
 
 var app = builder.Build();
+
+// Tự động chạy migrations khi ứng dụng khởi động
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        context.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Lỗi khi chạy migrations");
+    }
+}
 
 app.UseSwagger();
 app.UseSwaggerUI();
