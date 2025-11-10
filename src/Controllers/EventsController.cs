@@ -26,8 +26,8 @@ namespace StudentActivities.src.Controllers
             {
                 if (file != null)
                 {
-                    var uploadResult = await _svc.UploadImage(file);
-                    dto.Thumbnail = uploadResult.SecureUrl.ToString();
+                    var imageUrl = await _svc.UploadImageAsync(file);
+                    dto.Thumbnail = imageUrl;
                 }
 
                 var created = await _svc.CreateAsync(dto);

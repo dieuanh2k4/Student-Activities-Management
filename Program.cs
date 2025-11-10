@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json.Serialization;
+using Minio;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -58,6 +59,9 @@ builder.Services.AddScoped<IResgistrationService, ResgistrationService>();
 // Checkin Service
 builder.Services.AddScoped<ICheckinService, CheckinService>();
 
+// Storage Service
+builder.Services.AddScoped<IStorageService, MinioStorageService>();
+
 // Background Services
 // Tạm thời tắt để tránh lỗi khi chạy migrations
 // builder.Services.AddHostedService<StudentActivities.src.BackgroundServices.EventReminderService>();
@@ -79,11 +83,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-// Cấu hình Cloudinary
-builder.Services.Configure<CloudinarySetting>(
-    builder.Configuration.GetSection("CloudinarySettings")
-);
-
 // Cấu hình Sanitizer
 builder.Services.AddSingleton<IHtmlSanitizer>(provider =>
 {
@@ -102,6 +101,17 @@ builder.Services.AddSingleton<IHtmlSanitizer>(provider =>
     sanitizer.AllowedSchemes.Add("mailto");
 
     return sanitizer;
+});
+
+// đăng ký Minio client
+builder.Services.AddSingleton<IMinioClient>(sp =>
+{
+    var configuration = sp.GetRequiredService<IConfiguration>();
+    return new MinioClient()
+        .WithEndpoint(configuration["Minio:Endpoint"])
+        .WithCredentials(configuration["Minio:AccessKey"], configuration["Minio:SecretKey"])
+        .WithSSL(configuration.GetValue<bool>("Minio:UseSsl"))
+        .Build();
 });
 
 var app = builder.Build();

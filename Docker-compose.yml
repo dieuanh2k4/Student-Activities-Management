@@ -5,7 +5,7 @@ services:
     ports:
       - "8081:8080"
     environment:
-      ASPNETCORE_ENVIROMENT: Development
+      ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__DefaultConnection: "Host=database;Port=5432;Database=postgres;Username=StudentActivities;Password=${DB_PASSWORD}"
     depends_on:
       database:
@@ -30,6 +30,8 @@ services:
       timeout: 5s
       retries: 5
     restart: unless-stopped
+    networks:
+      - webnet
 
   nginx:
     image: nginx:latest
@@ -43,8 +45,48 @@ services:
     networks:
       - webnet
 
+  minio:
+    image: minio/minio:latest
+    container_name: minio-storage
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+    networks:
+      - webnet
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD}
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  minio-init:
+    image: minio/mc:latest
+    container_name: studentactivities-minio-init
+    depends_on:
+      minio:
+        condition: service_healthy
+    networks:
+      - webnet
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set myminio http://minio:9000 ${MINIO_USER} ${MINIO_PASSWORD};
+      mc mb myminio/studentactivities --ignore-existing;
+      mc anonymous set public myminio/studentactivities;
+      echo 'MinIO bucket created successfully';
+      exit 0;
+      "
+
 volumes:
   postgres-data:
+  minio-data:
 
 networks:
   webnet:
