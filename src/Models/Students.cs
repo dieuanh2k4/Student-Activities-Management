@@ -23,6 +23,6 @@ namespace StudentActivities.src.Models
         public AcademicClasses? AcademicClasses { get; set; }
         public List<TrainingScores>? TrainingScores { get; set; }
         public List<Notifications>? Notifications { get; set; }
-        public Checkin? Checkin { get; set; }
+        public List<Checkin>? Checkins { get; set; }
     }
 }

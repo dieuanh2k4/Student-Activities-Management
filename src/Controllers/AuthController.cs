@@ -37,7 +37,7 @@ namespace StudentActivities.src.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult TestAdmin()
         {
-            return Ok("✅ Bạn đang đăng nhập với quyền Admin!");
+            return Ok("Bạn đang đăng nhập với quyền Admin!");
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace StudentActivities.src.Controllers
         [Authorize(Roles = "Student")]
         public IActionResult TestStudent()
         {
-            return Ok("✅ Bạn đang đăng nhập với quyền Student!");
+            return Ok("Bạn đang đăng nhập với quyền Student!");
         }
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace StudentActivities.src.Controllers
         [Authorize(Roles = "Organizer")]
         public IActionResult TestOrganizer()
         {
-            return Ok("✅ Bạn đang đăng nhập với quyền Organizer!");
+            return Ok("Bạn đang đăng nhập với quyền Organizer!");
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace StudentActivities.src.Controllers
 
             return Ok(new
             {
-                message = $"👋 Xin chào {username}, bạn đang đăng nhập với quyền {role}."
+                message = $"Xin chào {username}, bạn đang đăng nhập với quyền {role}."
             });
         }
     }
