@@ -49,6 +49,7 @@ builder.Services.AddScoped<ISemesterService, SemesterService>();
 
 // Repository and Auth Services
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IOrganizerService, OrganizerService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
