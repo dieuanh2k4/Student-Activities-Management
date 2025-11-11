@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StudentActivities.src.Dtos.Clubs;
 using StudentActivities.src.Services.Interfaces;
@@ -13,9 +14,17 @@ namespace StudentActivities.src.Controllers
 
         public ClubsController(IClubService svc) => _svc = svc;
 
+        /// <summary>
+        /// Lấy tất cả CLB (Public - cho sinh viên xem)
+        /// </summary>
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> GetAll() => Ok(await _svc.GetAllAsync());
 
+        /// <summary>
+        /// Lấy CLB theo ID (Public)
+        /// </summary>
+        [AllowAnonymous]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -23,6 +32,10 @@ namespace StudentActivities.src.Controllers
             return item == null ? NotFound() : Ok(item);
         }
 
+        /// <summary>
+        /// Tạo CLB mới (Admin, Organizer)
+        /// </summary>
+        [Authorize(Roles = "Admin,Organizer")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateClubDto dto)
         {
@@ -30,6 +43,10 @@ namespace StudentActivities.src.Controllers
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
+        /// <summary>
+        /// Cập nhật CLB (Admin, Organizer)
+        /// </summary>
+        [Authorize(Roles = "Admin,Organizer")]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateClubDto dto)
         {
@@ -38,6 +55,10 @@ namespace StudentActivities.src.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Xóa CLB (Admin only)
+        /// </summary>
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {

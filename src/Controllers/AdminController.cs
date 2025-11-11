@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using StudentActivities.src.Data;
@@ -12,6 +13,7 @@ namespace StudentActivities.src.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "Admin")]  // Global filter: Chỉ Admin mới truy cập
     public class AdminController : ApiControllerBase
     {
         private readonly ApplicationDbContext _context;
