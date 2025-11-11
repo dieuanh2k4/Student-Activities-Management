@@ -34,9 +34,10 @@ namespace StudentActivities.src.Controllers
         }
 
         /// <summary>
-        /// Lấy danh sách sự kiện/CLB có thể đăng ký
+        /// Lấy danh sách sự kiện/CLB có thể đăng ký (cần đăng nhập)
         /// </summary>
         /// <param name="type">Lọc theo loại: EVENT hoặc CLUB (optional)</param>
+        [Authorize]  // Phải đăng nhập
         [HttpGet("available")]
         public async Task<IActionResult> GetAvailableActivities([FromQuery] string? type = null)
         {
@@ -57,8 +58,9 @@ namespace StudentActivities.src.Controllers
         }
 
         /// <summary>
-        /// Đăng ký tham gia sự kiện/CLB
+        /// Đăng ký tham gia sự kiện/CLB (Student)
         /// </summary>
+        [Authorize(Roles = "Student,Admin")]  // Student đăng ký, Admin test
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] CreateResgistrationDto dto)
         {
@@ -83,10 +85,11 @@ namespace StudentActivities.src.Controllers
         }
 
         /// <summary>
-        /// Hủy đăng ký sự kiện/CLB
+        /// Hủy đăng ký sự kiện/CLB (Student)
         /// </summary>
         /// <param name="activityId">ID của sự kiện/CLB</param>
         /// <param name="type">Loại: EVENT hoặc CLUB</param>
+        [Authorize(Roles = "Student,Admin")]  // Student hủy, Admin test
         [HttpDelete("cancel/{activityId}")]
         public async Task<IActionResult> Cancel(int activityId, [FromQuery] string type)
         {
@@ -107,10 +110,11 @@ namespace StudentActivities.src.Controllers
         }
 
         /// <summary>
-        /// Xem danh sách đăng ký của sinh viên
+        /// Xem danh sách đăng ký của sinh viên (Student, Admin, Organizer)
         /// </summary>
         /// <param name="type">Lọc theo loại: EVENT hoặc CLUB (optional)</param>
         /// <param name="status">Lọc theo trạng thái: REGISTERED, CANCELLED, etc (optional)</param>
+        [Authorize]  // Phải đăng nhập
         [HttpGet("my-registrations")]
         public async Task<IActionResult> GetMyRegistrations([FromQuery] string? type = null, [FromQuery] string? status = null)
         {

@@ -52,7 +52,13 @@ namespace StudentActivities.src.Services.Implements
             }
 
             user.UserName = updateUserDto.UserName;
-            user.Password = updateUserDto.Password;
+            
+            // Chỉ hash password nếu password mới được cung cấp
+            if (!string.IsNullOrEmpty(updateUserDto.Password))
+            {
+                user.Password = BCrypt.Net.BCrypt.HashPassword(updateUserDto.Password);
+            }
+            
             user.Role = updateUserDto.Role;
 
             return user;

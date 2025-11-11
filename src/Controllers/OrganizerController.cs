@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StudentActivities.src.Services.Interfaces;
 using System.Security.Claims;
@@ -40,7 +41,8 @@ namespace StudentActivities.src.Controllers
             return claim != null ? int.Parse(claim.Value) : throw new UnauthorizedAccessException();
         }
 
-        // 1. XEM DANH SÁCH
+        // 1. XEM DANH SÁCH (Organizer xem của mình, Admin xem tất cả)
+        [Authorize(Roles = "Organizer,Admin")]
         [HttpGet("my-items")]
         public async Task<IActionResult> GetMyItems()
         {
@@ -57,7 +59,8 @@ namespace StudentActivities.src.Controllers
             return Ok(new { Events = events, Clubs = clubs });
         }
 
-        // 2. CHỈNH SỬA
+        // 2. CHỈNH SỬA (Organizer sửa của mình)
+        [Authorize(Roles = "Organizer,Admin")]
         [HttpPut("events/{id}")]
         public async Task<IActionResult> UpdateEvent(int id, [FromBody] UpdateEventDto dto)
         {
@@ -69,6 +72,7 @@ namespace StudentActivities.src.Controllers
             return result ? NoContent() : NotFound();
         }
 
+        [Authorize(Roles = "Organizer,Admin")]
         [HttpPut("clubs/{id}")]
         public async Task<IActionResult> UpdateClub(int id, [FromBody] UpdateClubDto dto)
         {
@@ -80,7 +84,8 @@ namespace StudentActivities.src.Controllers
             return result ? NoContent() : NotFound();
         }
 
-        // 3. XÓA
+        // 3. XÓA (Organizer xóa của mình)
+        [Authorize(Roles = "Organizer,Admin")]
         [HttpDelete("events/{id}")]
         public async Task<IActionResult> DeleteEvent(int id)
         {
@@ -92,6 +97,7 @@ namespace StudentActivities.src.Controllers
             return result ? NoContent() : NotFound();
         }
 
+        [Authorize(Roles = "Organizer,Admin")]
         [HttpDelete("clubs/{id}")]
         public async Task<IActionResult> DeleteClub(int id)
         {
@@ -103,6 +109,7 @@ namespace StudentActivities.src.Controllers
             return result ? NoContent() : NotFound();
         }
 
+        [Authorize(Roles = "Admin")]  // Chỉ Admin xem tất cả organizers
         [HttpGet("get-all-organizer")]
         public async Task<IActionResult> GetAllOrganizer()
         {
@@ -118,6 +125,7 @@ namespace StudentActivities.src.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]  // Chỉ Admin tạo organizer
         [HttpPost("create-organizer")]
         public async Task<IActionResult> CreateOrganizer([FromForm] CreateOrganizerDto createOrganizerDto, int userid)
         {
@@ -132,6 +140,7 @@ namespace StudentActivities.src.Controllers
             }
         }
 
+        [Authorize(Roles = "Organizer,Admin")]  // Organizer sửa profile mình, Admin sửa tất cả
         [HttpPut("update-organizer/{id}")]
         public async Task<IActionResult> UpdateInforOrganizer([FromForm] UpdateOrganizerDto updateOrganizerDto, int id)
         {

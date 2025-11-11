@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StudentActivities.src.Data;
 using StudentActivities.src.Dtos.Students;
@@ -22,6 +23,7 @@ namespace StudentActivities.src.Controllers
             _studentService = studentService;
         }
 
+        [Authorize(Roles = "Admin")]  // Chỉ Admin xem tất cả students
         [HttpGet("get-all-student")]
         public async Task<IActionResult> GetAllStudent()
         {
@@ -37,6 +39,7 @@ namespace StudentActivities.src.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]  // Chỉ Admin tạo student
         [HttpPost("create-student")]
         public async Task<IActionResult> CreateStudent([FromForm] CreateStudentDto createStudentDto, int userid)
         {
@@ -55,6 +58,7 @@ namespace StudentActivities.src.Controllers
             }
         }
 
+        [Authorize]  // Student sửa profile mình, Admin sửa tất cả
         [HttpPut("update-student/{id}")]
         public async Task<IActionResult> UpdateInforStudent([FromForm] UpdateStudentDto updateStudentDto, int id)
         {
@@ -72,12 +76,13 @@ namespace StudentActivities.src.Controllers
             }
         }
 
+        [Authorize(Roles = "Student,Admin")]  // Student xem điểm rèn luyện của mình
         [HttpGet("get-training-score")]
-        public async Task<IActionResult> GetTrainingScore(int studentId)
+        public async Task<IActionResult> GetTrainingScore(int studentid)
         {
             try
             {
-                var trainingScore = await _studentService.GetTrainingScore(studentId);
+                var trainingScore = await _studentService.GetTrainingScore(studentid);
 
                 return Ok(trainingScore);
             }
@@ -87,12 +92,13 @@ namespace StudentActivities.src.Controllers
             }
         }
 
+        [Authorize(Roles = "Student,Admin")]  // Student xem events đã tham gia
         [HttpGet("get-student-events")]
-        public async Task<IActionResult> GetStudentEvents(int studentId)
+        public async Task<IActionResult> GetStudentEvents(int studentid)
         {
              try
             {
-                var studentEvents = await _studentService.GetStudentEvents(studentId);
+                var studentEvents = await _studentService.GetStudentEvents(studentid);
 
                 return Ok(studentEvents);
             }

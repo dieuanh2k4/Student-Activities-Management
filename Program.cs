@@ -29,6 +29,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
 });
+builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 
 // Database Context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -50,6 +51,7 @@ builder.Services.AddScoped<ISemesterService, SemesterService>();
 
 // Repository and Auth Services
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IOrganizerService, OrganizerService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
@@ -61,6 +63,8 @@ builder.Services.AddScoped<ICheckinService, CheckinService>();
 
 // Storage Service
 builder.Services.AddScoped<IStorageService, MinioStorageService>();
+// Report Service
+builder.Services.AddScoped<IReportService, ReportService>();
 
 // Background Services
 // Tạm thời tắt để tránh lỗi khi chạy migrations
