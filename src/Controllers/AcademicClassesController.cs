@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StudentActivities.src.Dtos.AcademicClasses;
 using StudentActivities.src.Services.Interfaces;
@@ -6,6 +7,7 @@ namespace StudentActivities.src.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]  // Global filter: Chỉ Admin quản lý lớp học
     public class AcademicClassesController : ControllerBase
     {
         private readonly IAcademicClassService _academicClassService;
@@ -40,8 +42,9 @@ namespace StudentActivities.src.Controllers
         }
 
         /// <summary>
-        /// Lấy danh sách tất cả lớp học
+        /// Lấy danh sách tất cả lớp học (Public - ai cũng xem được)
         /// </summary>
+        [AllowAnonymous]  // Override: Public endpoint
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
