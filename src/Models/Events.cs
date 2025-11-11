@@ -35,7 +35,7 @@ namespace StudentActivities.src.Models
         public Organizers? Organizers { get; set; }
         public List<Resgistrations>? Resgistrations { get; set; }
         public List<Notifications>? Notifications { get; set; }
-        public TrainingScores? TrainingScores { get; set; }
-        public Checkin? Checkin { get; set; }
+        public List<TrainingScores>? TrainingScores { get; set; }
+        public List<Checkin>? Checkins { get; set; }
     }
 }

@@ -108,9 +108,8 @@ namespace StudentActivities.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("integer");
@@ -119,11 +118,9 @@ namespace StudentActivities.Migrations
 
                     b.HasIndex("CheckedInBy");
 
-                    b.HasIndex("EventId")
-                        .IsUnique();
+                    b.HasIndex("EventId");
 
-                    b.HasIndex("StudentId")
-                        .IsUnique();
+                    b.HasIndex("StudentId");
 
                     b.ToTable("Checkins");
                 });
@@ -141,9 +138,9 @@ namespace StudentActivities.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(1000)
+                        .HasMaxLength(200)
                         .IsUnicode(true)
-                        .HasColumnType("character varying(1000)");
+                        .HasColumnType("character varying(200)");
 
                     b.Property<int>("MaxCapacity")
                         .HasColumnType("integer");
@@ -161,9 +158,7 @@ namespace StudentActivities.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Thumbnail")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("text");
 
                     b.Property<decimal>("TrainingPoints")
                         .HasColumnType("numeric");
@@ -187,16 +182,10 @@ namespace StudentActivities.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(1000)
-                        .IsUnicode(true)
-                        .HasColumnType("character varying(1000)");
+                        .HasColumnType("text");
 
                     b.Property<string>("DetailDescription")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .IsUnicode(true)
-                        .HasColumnType("character varying(2000)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("timestamp with time zone");
@@ -219,10 +208,7 @@ namespace StudentActivities.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Paticipants")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .IsUnicode(true)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("RegistrationEndDate")
                         .HasColumnType("timestamp with time zone");
@@ -231,9 +217,7 @@ namespace StudentActivities.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Thumbnail")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasColumnType("text");
 
                     b.Property<decimal>("TrainingPoints")
                         .HasColumnType("numeric");
@@ -273,6 +257,7 @@ namespace StudentActivities.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClubId")
+                        .IsRequired()
                         .HasColumnType("integer");
 
                     b.Property<string>("Context")
@@ -281,17 +266,19 @@ namespace StudentActivities.Migrations
                         .HasColumnType("character varying(500)");
 
                     b.Property<int?>("EventId")
+                        .IsRequired()
                         .HasColumnType("integer");
 
                     b.Property<DateOnly>("SendDate")
                         .HasColumnType("date");
 
                     b.Property<string>("Status")
-                        .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
+                        .HasColumnType("text");
 
                     b.Property<int>("StudentId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("StudentsId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -300,7 +287,7 @@ namespace StudentActivities.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.HasIndex("StudentId");
+                    b.HasIndex("StudentsId");
 
                     b.ToTable("Notifications");
                 });
@@ -392,9 +379,11 @@ namespace StudentActivities.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int?>("ClubId")
+                        .IsRequired()
                         .HasColumnType("integer");
 
                     b.Property<int?>("EventId")
+                        .IsRequired()
                         .HasColumnType("integer");
 
                     b.Property<string>("Notes")
@@ -408,16 +397,15 @@ namespace StudentActivities.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -535,8 +523,7 @@ namespace StudentActivities.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EventId")
-                        .IsUnique();
+                    b.HasIndex("EventId");
 
                     b.HasIndex("SemesterId");
 
@@ -555,17 +542,18 @@ namespace StudentActivities.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
 
                     b.Property<string>("Role")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<string>("UserName")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.HasKey("Id");
 
@@ -602,14 +590,14 @@ namespace StudentActivities.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("StudentActivities.src.Models.Events", "Events")
-                        .WithOne("Checkin")
-                        .HasForeignKey("StudentActivities.src.Models.Checkin", "EventId")
+                        .WithMany("Checkins")
+                        .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("StudentActivities.src.Models.Students", "Students")
-                        .WithOne("Checkin")
-                        .HasForeignKey("StudentActivities.src.Models.Checkin", "StudentId")
+                        .WithMany("Checkins")
+                        .HasForeignKey("StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -647,18 +635,18 @@ namespace StudentActivities.Migrations
                     b.HasOne("StudentActivities.src.Models.Clubs", "Clubs")
                         .WithMany("Notifications")
                         .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("StudentActivities.src.Models.Events", "Events")
                         .WithMany("Notifications")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("StudentActivities.src.Models.Students", "Students")
                         .WithMany("Notifications")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("StudentsId");
 
                     b.Navigation("Clubs");
 
@@ -702,12 +690,14 @@ namespace StudentActivities.Migrations
                     b.HasOne("StudentActivities.src.Models.Clubs", "Clubs")
                         .WithMany("Resgistrations")
                         .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("StudentActivities.src.Models.Events", "Events")
                         .WithMany("Resgistrations")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("StudentActivities.src.Models.Students", "Students")
                         .WithMany("Resgistrations")
@@ -744,8 +734,8 @@ namespace StudentActivities.Migrations
             modelBuilder.Entity("StudentActivities.src.Models.TrainingScores", b =>
                 {
                     b.HasOne("StudentActivities.src.Models.Events", "Events")
-                        .WithOne("TrainingScores")
-                        .HasForeignKey("StudentActivities.src.Models.TrainingScores", "EventId")
+                        .WithMany("TrainingScores")
+                        .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -787,7 +777,7 @@ namespace StudentActivities.Migrations
 
             modelBuilder.Entity("StudentActivities.src.Models.Events", b =>
                 {
-                    b.Navigation("Checkin");
+                    b.Navigation("Checkins");
 
                     b.Navigation("Notifications");
 
@@ -817,7 +807,7 @@ namespace StudentActivities.Migrations
 
             modelBuilder.Entity("StudentActivities.src.Models.Students", b =>
                 {
-                    b.Navigation("Checkin");
+                    b.Navigation("Checkins");
 
                     b.Navigation("Notifications");
 
