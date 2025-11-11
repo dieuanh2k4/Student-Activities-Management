@@ -98,18 +98,26 @@ namespace StudentActivities.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<DateTime?>("CheckInTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("CheckedInBy")
+                        .HasColumnType("integer");
+
                     b.Property<int>("EventId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("character varying(10)");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<int>("StudentId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CheckedInBy");
 
                     b.HasIndex("EventId")
                         .IsUnique();
@@ -264,7 +272,7 @@ namespace StudentActivities.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ClubId")
+                    b.Property<int?>("ClubId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Context")
@@ -272,7 +280,7 @@ namespace StudentActivities.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("character varying(500)");
 
-                    b.Property<int>("EventId")
+                    b.Property<int?>("EventId")
                         .HasColumnType("integer");
 
                     b.Property<DateOnly>("SendDate")
@@ -588,6 +596,11 @@ namespace StudentActivities.Migrations
 
             modelBuilder.Entity("StudentActivities.src.Models.Checkin", b =>
                 {
+                    b.HasOne("StudentActivities.src.Models.Users", "CheckedInByUser")
+                        .WithMany()
+                        .HasForeignKey("CheckedInBy")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.HasOne("StudentActivities.src.Models.Events", "Events")
                         .WithOne("Checkin")
                         .HasForeignKey("StudentActivities.src.Models.Checkin", "EventId")
@@ -599,6 +612,8 @@ namespace StudentActivities.Migrations
                         .HasForeignKey("StudentActivities.src.Models.Checkin", "StudentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("CheckedInByUser");
 
                     b.Navigation("Events");
 
@@ -632,14 +647,12 @@ namespace StudentActivities.Migrations
                     b.HasOne("StudentActivities.src.Models.Clubs", "Clubs")
                         .WithMany("Notifications")
                         .HasForeignKey("ClubId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("StudentActivities.src.Models.Events", "Events")
                         .WithMany("Notifications")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("StudentActivities.src.Models.Students", "Students")
                         .WithMany("Notifications")

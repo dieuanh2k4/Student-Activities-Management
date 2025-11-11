@@ -60,6 +60,9 @@ builder.Services.AddScoped<IResgistrationService, ResgistrationService>();
 // Checkin Service
 builder.Services.AddScoped<ICheckinService, CheckinService>();
 
+// Report Service
+builder.Services.AddScoped<IReportService, ReportService>();
+
 // Background Services
 // Đã sửa lỗi DateTime UTC - bật lại Background Service
 builder.Services.AddHostedService<StudentActivities.src.BackgroundServices.EventReminderService>();
