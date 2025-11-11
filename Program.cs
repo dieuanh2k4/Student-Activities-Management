@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json.Serialization;
+using Minio;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -60,12 +61,14 @@ builder.Services.AddScoped<IResgistrationService, ResgistrationService>();
 // Checkin Service
 builder.Services.AddScoped<ICheckinService, CheckinService>();
 
+// Storage Service
+builder.Services.AddScoped<IStorageService, MinioStorageService>();
 // Report Service
 builder.Services.AddScoped<IReportService, ReportService>();
 
 // Background Services
-// Đã sửa lỗi DateTime UTC - bật lại Background Service
-builder.Services.AddHostedService<StudentActivities.src.BackgroundServices.EventReminderService>();
+// Tạm thời tắt để tránh lỗi khi chạy migrations
+// builder.Services.AddHostedService<StudentActivities.src.BackgroundServices.EventReminderService>();
 
 // JWT Configuration
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -83,11 +86,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(key)
         };
     });
-
-// Cấu hình Cloudinary
-builder.Services.Configure<CloudinarySetting>(
-    builder.Configuration.GetSection("CloudinarySettings")
-);
 
 // Cấu hình Sanitizer
 builder.Services.AddSingleton<IHtmlSanitizer>(provider =>
@@ -109,7 +107,34 @@ builder.Services.AddSingleton<IHtmlSanitizer>(provider =>
     return sanitizer;
 });
 
+// đăng ký Minio client
+builder.Services.AddSingleton<IMinioClient>(sp =>
+{
+    var configuration = sp.GetRequiredService<IConfiguration>();
+    return new MinioClient()
+        .WithEndpoint(configuration["Minio:Endpoint"])
+        .WithCredentials(configuration["Minio:AccessKey"], configuration["Minio:SecretKey"])
+        .WithSSL(configuration.GetValue<bool>("Minio:UseSsl"))
+        .Build();
+});
+
 var app = builder.Build();
+
+// Tự động chạy migrations khi ứng dụng khởi động
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<ApplicationDbContext>();
+        context.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Lỗi khi chạy migrations");
+    }
+}
 
 app.UseSwagger();
 app.UseSwaggerUI();

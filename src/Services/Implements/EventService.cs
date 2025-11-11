@@ -1,56 +1,37 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CloudinaryDotNet;
-using CloudinaryDotNet.Actions;
 using Ganss.Xss;
-using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using StudentActivities.src.Data;
 using StudentActivities.src.Dtos.Events;
 using StudentActivities.src.Mappers;
 using StudentActivities.src.Models;
 using StudentActivities.src.Services.Interfaces;
-using StudentActivities.src.Utils;
 
 namespace StudentActivities.src.Services.Implements
 {
     public class EventService : IEventService
     {
         private readonly ApplicationDbContext _context;
-        private readonly Cloudinary _cloudinary;
+        private readonly IStorageService _storageService;
 
-        public EventService(ApplicationDbContext context, IOptions<CloudinarySetting> config)
+        public EventService(ApplicationDbContext context, IStorageService storageService)
         {
-            var acc = new Account(
-                config.Value.CloudName,
-                config.Value.ApiKey,
-                config.Value.ApiSecret
-            );
-
             _context = context;
-            _cloudinary = new Cloudinary(acc);
+            _storageService = storageService;
         }
 
-        // up ảnh lên cloudinary
-        public async Task<ImageUploadResult> UploadImage(IFormFile file)
+        // Upload ảnh lên MinIO
+        public async Task<string> UploadImageAsync(IFormFile file)
         {
-            var UploadResult = new ImageUploadResult();
-
-            if (file.Length > 0)
+            if (file == null || file.Length == 0)
             {
-                // mở 1 luồng stream của file bằng OpenReadStream là để xử lý dl nhị phân, tối ưu hóa bộ nhớ và hiệu suất...
-                using var stream = file.OpenReadStream();
-                var uploadParams = new ImageUploadParams
-                {
-                    File = new FileDescription(file.FileName, stream),
-                    Transformation = new Transformation().Crop("fill")
-                };
-                UploadResult = await _cloudinary.UploadAsync(uploadParams);
+                throw new ArgumentException("File is empty");
             }
 
-            return UploadResult;
+            var fileName = await _storageService.UploadImageAsync(file, "events");
+            return _storageService.GetImageUrl(fileName);
         }
 
         public async Task<EventDto> CreateAsync(CreateEventDto dto)
