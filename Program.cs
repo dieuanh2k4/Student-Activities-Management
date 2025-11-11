@@ -68,13 +68,18 @@ builder.Services.AddScoped<IReportService, ReportService>();
 
 // Background Services
 // Tạm thời tắt để tránh lỗi khi chạy migrations
+// Training Score Service
+builder.Services.AddScoped<ITrainingScoreService, TrainingScoreService>();
+
+// Background Services
+// Đã sửa lỗi DateTime UTC - bật lại Background Service
 // builder.Services.AddHostedService<StudentActivities.src.BackgroundServices.EventReminderService>();
 
 // JWT Configuration
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
+        var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? "default-secret-key-minimum-32-characters-long");
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
