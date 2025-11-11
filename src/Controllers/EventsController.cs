@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StudentActivities.src.Dtos.Events;
 using StudentActivities.src.Services.Interfaces;
@@ -19,6 +20,7 @@ namespace StudentActivities.src.Controllers
             _notificationService = notificationService;
         }
 
+        [Authorize(Roles = "Admin,Organizer")]  // Chỉ Admin và Organizer tạo event
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] CreateEventDto dto, IFormFile file)
         {
@@ -49,6 +51,7 @@ namespace StudentActivities.src.Controllers
             }
         }
 
+        [AllowAnonymous]  // Public: Ai cũng xem được danh sách events
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -63,6 +66,7 @@ namespace StudentActivities.src.Controllers
             }
         }
 
+        [AllowAnonymous]  // Public: Ai cũng xem được chi tiết event
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -78,6 +82,7 @@ namespace StudentActivities.src.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,Organizer")]  // Chỉ Admin và Organizer sửa event
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateEventDto dto)
         {
@@ -103,6 +108,7 @@ namespace StudentActivities.src.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]  // Chỉ Admin xóa event
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
