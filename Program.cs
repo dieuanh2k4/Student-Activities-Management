@@ -28,6 +28,7 @@ builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
 });
+builder.Services.AddScoped<IStatisticsService, StatisticsService>();
 
 // Database Context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
