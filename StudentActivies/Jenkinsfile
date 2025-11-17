@@ -5,6 +5,12 @@ pipeline {
         pollSCM('H/5 * * * *') 
     }
 
+    environment {
+        REGISTRY_URL = "localhost:5000"
+        IMAGE_NAME   = "studentactivities"
+        IMAGE_TAG    = "latest"
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -20,20 +26,23 @@ pipeline {
             }
         }
 
-        stage('Build and Push to Registry') {
+        stage('Docker Tag & Push') {
             steps {
-                script {
-                    def registry_url = "localhost:5000"
+                withCredentials([usernamePassword(
+                    credentialsId: 'docker-registry',
+                    usernameVariable: 'REGISTRY_USER',
+                    passwordVariable: 'REGISTRY_PASS'
+                )]) {
+                    script {
+                        // 1. Tag ảnh
+                        bat "docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}"
 
-                    def source_image = "studentactivities:latest"
+                        // 2. Login vào Registry
+                        bat "@echo %REGISTRY_PASS% | docker login ${REGISTRY_URL} -u %REGISTRY_USER% --password-stdin"
 
-                    def target_image = "${registry_url}/studentactivities:latest"
-
-                    // 1. Build ảnh với tên có kèm địa chỉ Registry (localhost:5000)
-                    bat "docker tag ${source_image} ${target_image}"
-
-                    // 2. Đẩy ảnh vừa build lên Registry
-                    bat "docker push ${target_image}"
+                        // 3. Push ảnh lên
+                        bat "docker push ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}"
+                    }
                 }
             }
         }
