@@ -1,0 +1,46 @@
+# Build folders
+bin/
+obj/
+
+# VS & VSCode
+.vs/
+.vscode/
+
+# User files
+*.user
+*.suo
+
+# Build outputs
+*.exe
+*.dll
+*.pdb
+*.cache
+*.log
+
+# NuGet
+*.nupkg
+*.nuget.*
+
+# Jenkins setup files (chỉ dùng để setup Jenkins server, không cần cho pipeline)
+Dockerfile.jenkins
+docker-compose.jenkins.yml
+
+# Secrets và production configs
+# appsettings.Production.json
+# .env
+# *.env.production
+
+# Test results
+TestResults/
+*.trx
+
+# Others
+*.http
+obj/project.nuget.cache
+obj/StudentActivities.csproj.nuget.dgspec.json
+obj/StudentActivities.csproj.nuget.g.props
+obj/Debug/net8.0/StudentActivities.AssemblyInfo.cs
+obj/Debug/net8.0/StudentActivities.AssemblyInfoInputs.cache
+obj/Debug/net8.0/StudentActivities.csproj.AssemblyReference.cache
+obj/Debug/net8.0/StudentActivities.assets.cache
+obj/Debug/net8.0/StudentActivities.GeneratedMSBuildEditorConfig.editorconfig
