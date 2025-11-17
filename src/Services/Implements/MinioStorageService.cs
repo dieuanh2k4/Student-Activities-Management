@@ -25,7 +25,7 @@ namespace StudentActivities.src.Services.Implements
         {
             if (file == null || file.Length == 0)
             {
-                throw new ArgumentException("File is empty");
+                throw new ArgumentException("File không tồn tại");
             }
 
             // Đảm bảo bucket tồn tại
