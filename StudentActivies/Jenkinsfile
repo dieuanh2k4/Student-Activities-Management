@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    triggers {
+        pollSCM('H/5 * * * *') 
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -13,6 +17,24 @@ pipeline {
                 bat '''
                     docker build -t studentactivities:latest -f StudentActivies/Dockerfile .
                 '''
+            }
+        }
+
+        stage('Build and Push to Registry') {
+            steps {
+                script {
+                    def registry_url = "localhost:5000"
+
+                    def source_image = "studentactivities:latest"
+
+                    def target_image = "${registry_url}/studentactivities:latest"
+
+                    // 1. Build ảnh với tên có kèm địa chỉ Registry (localhost:5000)
+                    bat 'docker tagf ${source_image} ${target_image}'
+
+                    // 2. Đẩy ảnh vừa build lên Registry
+                    bat 'docker push ${target_image}'
+                }
             }
         }
     }
