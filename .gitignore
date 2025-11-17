@@ -1,7 +1,6 @@
 # Build folders
 bin/
 obj/
-Migrations/
 
 # VS & VSCode
 .vs/
@@ -22,14 +21,21 @@ Migrations/
 *.nupkg
 *.nuget.*
 
+# Jenkins setup files (chỉ dùng để setup Jenkins server, không cần cho pipeline)
+Dockerfile.jenkins
+docker-compose.jenkins.yml
+
+# Secrets và production configs
+# appsettings.Production.json
+# .env
+# *.env.production
+
+# Test results
+TestResults/
+*.trx
+
 # Others
-*.md
 *.http
-# *.deps.json
-# *.json
-obj/project.nuget.cache
-obj/project.nuget.cache
-obj/StudentActivities.csproj.nuget.dgspec.json
 obj/project.nuget.cache
 obj/StudentActivities.csproj.nuget.dgspec.json
 obj/StudentActivities.csproj.nuget.g.props
