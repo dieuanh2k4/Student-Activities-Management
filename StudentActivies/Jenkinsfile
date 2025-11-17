@@ -30,10 +30,10 @@ pipeline {
                     def target_image = "${registry_url}/studentactivities:latest"
 
                     // 1. Build ảnh với tên có kèm địa chỉ Registry (localhost:5000)
-                    bat 'docker tag ${source_image} ${target_image}'
+                    bat "docker tag ${source_image} ${target_image}"
 
                     // 2. Đẩy ảnh vừa build lên Registry
-                    bat 'docker push ${target_image}'
+                    bat "docker push ${target_image}"
                 }
             }
         }
