@@ -61,7 +61,7 @@ pipeline {
             steps {
                 script {
                     // 1. Kích hoạt SSH Agent để có quyền truy cập Server
-                    sshagent(['ssh-credentials-id']) {
+                    sshagent(['ssh-credentials']) {
                         
                         // 2. Lấy lại User/Pass Docker để đăng nhập trên Server đích
                         withCredentials([usernamePassword(
