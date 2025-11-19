@@ -20,9 +20,16 @@ pipeline {
 
         stage('Docker Build') {
             steps {
-                bat '''
-                    docker build -t studentactivities:latest -f StudentActivies/Dockerfile .
-                '''
+                script {
+                    // Debug: Kiểm tra cấu trúc thư mục trước khi build
+                    bat 'dir'
+                    bat 'dir StudentActivies'
+                    
+                    // Build Docker image
+                    bat '''
+                        docker build -t studentactivities:latest -f StudentActivies/Dockerfile .
+                    '''
+                }
             }
         }
 
@@ -42,6 +49,35 @@ pipeline {
 
                         // 3. Push ảnh lên
                         bat "docker push ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}"
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Server') {
+            steps {
+                script {
+                    // Sử dụng plugin sshagent để kết nối SSH
+                    // 'ssh-credentials-id' là ID của Credential (username/private key) bạn lưu trong Jenkins
+                    sshagent(['ssh-credentials-id']) {
+                        // Lưu ý: Vì agent Jenkins là Windows (dùng bat), ta dùng ssh.exe
+                        // Nếu server đích là Linux, các lệnh trong chuỗi lệnh ssh phải là lệnh Linux
+                        bat """
+                            ssh -o StrictHostKeyChecking=no user@your-server-ip "
+                                echo Đăng nhập vào Registry...
+                                echo $REGISTRY_PASS | docker login ${REGISTRY_URL} -u $REGISTRY_USER --password-stdin
+
+                                echo Pull image mới nhất...
+                                docker pull ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}
+
+                                echo Dừng và xóa container cũ (nếu có)...
+                                docker stop ${IMAGE_NAME} || true
+                                docker rm ${IMAGE_NAME} || true
+
+                                echo Chạy container mới...
+                                docker run -d --name ${IMAGE_NAME} -p 80:8080 --restart always ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}
+                            "
+                        """
                     }
                 }
             }
