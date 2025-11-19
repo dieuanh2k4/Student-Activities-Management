@@ -60,25 +60,31 @@ pipeline {
         stage('Deploy to Server') {
             steps {
                 script {
-                    // Bạn cần tạo Credential 'ssh-credentials-id' trên Jenkins trước
-                    sshagent(['ssh-credentials']) {
-                        // Dùng sh để gọi ssh client trên Linux
-                        sh """
-                            ssh -o StrictHostKeyChecking=no user@your-server-ip "
-                                echo 'Dang nhap vao Registry...'
-                                echo $REGISTRY_PASS | docker login ${REGISTRY_URL} -u $REGISTRY_USER --password-stdin
-
-                                echo 'Pull image moi nhat...'
-                                docker pull ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}
-
-                                echo 'Dung va xoa container cu...'
-                                docker stop ${IMAGE_NAME} || true
-                                docker rm ${IMAGE_NAME} || true
-
-                                echo 'Chay container moi...'
-                                docker run -d --name ${IMAGE_NAME} -p 80:8080 --restart always ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}
-                            "
-                        """
+                    // 1. Kích hoạt SSH Agent để có quyền truy cập Server
+                    sshagent(['ssh-credentials-id']) {
+                        
+                        // 2. Lấy lại User/Pass Docker để đăng nhập trên Server đích
+                        withCredentials([usernamePassword(
+                            credentialsId: 'docker-registry',
+                            usernameVariable: 'REGISTRY_USER',
+                            passwordVariable: 'REGISTRY_PASS'
+                        )]) {
+                            // 3. Thực hiện lệnh SSH
+                            sh """
+                                ssh -o StrictHostKeyChecking=no user@192.168.x.x "
+                                    echo 'Dang nhap Docker...'
+                                    echo $REGISTRY_PASS | docker login ${REGISTRY_URL} -u $REGISTRY_USER --password-stdin
+                                    
+                                    echo 'Pull image...'
+                                    docker pull ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}
+                                    
+                                    echo 'Restart container...'
+                                    docker stop ${IMAGE_NAME} || true
+                                    docker rm ${IMAGE_NAME} || true
+                                    docker run -d --name ${IMAGE_NAME} -p 80:8080 --restart always ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}
+                                "
+                            """
+                        }
                     }
                 }
             }
