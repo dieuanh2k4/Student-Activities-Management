@@ -61,7 +61,7 @@ pipeline {
             steps {
                 script {
                     // Bạn cần tạo Credential 'ssh-credentials-id' trên Jenkins trước
-                    sshagent(['ssh-credentials-id']) {
+                    sshagent(['ssh-credentials']) {
                         // Dùng sh để gọi ssh client trên Linux
                         sh """
                             ssh -o StrictHostKeyChecking=no user@your-server-ip "
