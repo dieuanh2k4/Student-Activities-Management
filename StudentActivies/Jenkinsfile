@@ -6,7 +6,9 @@ pipeline {
     }
 
     environment {
-        REGISTRY_URL = "localhost:5000"
+        // Lưu ý: Nếu Jenkins chạy trong Docker, 'localhost' có thể trỏ vào container Jenkins chứ không phải máy host.
+        // Bạn có thể cần dùng IP host hoặc tên service trong Docker network.
+        REGISTRY_URL = "localhost:5000" 
         IMAGE_NAME   = "studentactivities"
         IMAGE_TAG    = "latest"
     }
@@ -21,14 +23,15 @@ pipeline {
         stage('Docker Build') {
             steps {
                 script {
-                    // Debug: Kiểm tra cấu trúc thư mục trước khi build
-                    bat 'dir'
-                    bat 'dir StudentActivies'
+                    // Debug: Kiểm tra cấu trúc thư mục trên Linux (dùng ls -la thay vì dir)
+                    sh 'ls -la'
+                    // Lưu ý: Kiểm tra kỹ tên thư mục là "StudentActivies" hay "StudentActivities" trong code của bạn
+                    sh 'ls -la StudentActivies' 
                     
-                    // Build Docker image
-                    bat '''
-                        docker build -t studentactivities:latest -f StudentActivies/Dockerfile .
-                    '''
+                    // Build Docker image (dùng sh)
+                    sh """
+                        docker build -t ${IMAGE_NAME}:${IMAGE_TAG} -f StudentActivies/Dockerfile .
+                    """
                 }
             }
         }
@@ -42,13 +45,13 @@ pipeline {
                 )]) {
                     script {
                         // 1. Tag ảnh
-                        bat "docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}"
+                        sh "docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}"
 
-                        // 2. Login vào Registry
-                        bat "@echo %REGISTRY_PASS% | docker login ${REGISTRY_URL} -u %REGISTRY_USER% --password-stdin"
+                        // 2. Login vào Registry (Cú pháp Linux: dùng $VAR thay vì %VAR%)
+                        sh "echo $REGISTRY_PASS | docker login ${REGISTRY_URL} -u $REGISTRY_USER --password-stdin"
 
                         // 3. Push ảnh lên
-                        bat "docker push ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}"
+                        sh "docker push ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}"
                     }
                 }
             }
@@ -57,24 +60,22 @@ pipeline {
         stage('Deploy to Server') {
             steps {
                 script {
-                    // Sử dụng plugin sshagent để kết nối SSH
-                    // 'ssh-credentials-id' là ID của Credential (username/private key) bạn lưu trong Jenkins
+                    // Bạn cần tạo Credential 'ssh-credentials-id' trên Jenkins trước
                     sshagent(['ssh-credentials-id']) {
-                        // Lưu ý: Vì agent Jenkins là Windows (dùng bat), ta dùng ssh.exe
-                        // Nếu server đích là Linux, các lệnh trong chuỗi lệnh ssh phải là lệnh Linux
-                        bat """
+                        // Dùng sh để gọi ssh client trên Linux
+                        sh """
                             ssh -o StrictHostKeyChecking=no user@your-server-ip "
-                                echo Đăng nhập vào Registry...
+                                echo 'Dang nhap vao Registry...'
                                 echo $REGISTRY_PASS | docker login ${REGISTRY_URL} -u $REGISTRY_USER --password-stdin
 
-                                echo Pull image mới nhất...
+                                echo 'Pull image moi nhat...'
                                 docker pull ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}
 
-                                echo Dừng và xóa container cũ (nếu có)...
+                                echo 'Dung va xoa container cu...'
                                 docker stop ${IMAGE_NAME} || true
                                 docker rm ${IMAGE_NAME} || true
 
-                                echo Chạy container mới...
+                                echo 'Chay container moi...'
                                 docker run -d --name ${IMAGE_NAME} -p 80:8080 --restart always ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}
                             "
                         """
