@@ -6,9 +6,8 @@ pipeline {
     }
 
     environment {
-        // Lưu ý: Nếu Jenkins chạy trong Docker, 'localhost' có thể trỏ vào container Jenkins chứ không phải máy host.
-        // Bạn có thể cần dùng IP host hoặc tên service trong Docker network.
-        REGISTRY_URL = "localhost:5000" 
+        // Registry phải dùng IP LAN để các máy khác truy cập được
+        REGISTRY_URL = "192.168.102.3:5000" 
         IMAGE_NAME   = "studentactivities"
         IMAGE_TAG    = "latest"
     }
@@ -69,11 +68,11 @@ pipeline {
                             usernameVariable: 'REGISTRY_USER',
                             passwordVariable: 'REGISTRY_PASS'
                         )]) {
-                            // 3. Thực hiện lệnh SSH
+                            // 3. Thực hiện lệnh SSH với escape đúng các biến
                             sh """
-                                ssh -o StrictHostKeyChecking=no user@192.168.x.x "
+                                ssh -o StrictHostKeyChecking=no jenkins@192.168.102.3 "
                                     echo 'Dang nhap Docker...'
-                                    echo $REGISTRY_PASS | docker login ${REGISTRY_URL} -u $REGISTRY_USER --password-stdin
+                                    echo \${REGISTRY_PASS} | docker login ${REGISTRY_URL} -u \${REGISTRY_USER} --password-stdin
                                     
                                     echo 'Pull image...'
                                     docker pull ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}
@@ -82,6 +81,8 @@ pipeline {
                                     docker stop ${IMAGE_NAME} || true
                                     docker rm ${IMAGE_NAME} || true
                                     docker run -d --name ${IMAGE_NAME} -p 80:8080 --restart always ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}
+                                    
+                                    echo 'Deployment completed!'
                                 "
                             """
                         }
