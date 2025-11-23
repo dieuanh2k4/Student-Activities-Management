@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         // Registry phải dùng IP LAN để các máy khác truy cập được
-        REGISTRY_URL = "192.168.102.3:5000" 
+        REGISTRY_URL = "192.168.102.3:5443" 
         IMAGE_NAME   = "studentactivities"
         IMAGE_TAG    = "latest"
     }
