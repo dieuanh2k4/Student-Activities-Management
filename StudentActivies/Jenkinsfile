@@ -6,8 +6,9 @@ pipeline {
     }
 
     environment {
-        // Registry phải dùng IP LAN để các máy khác truy cập được
-        REGISTRY_URL = "192.168.102.3:5443" 
+        // IP của server chạy Docker Registry và nơi deploy app
+        DEPLOY_SERVER = "192.168.102.3"
+        REGISTRY_URL = "${DEPLOY_SERVER}:5443" 
         IMAGE_NAME   = "studentactivities"
         IMAGE_TAG    = "latest"
     }
@@ -64,7 +65,7 @@ pipeline {
                         
                         // 2. Copy env file lên server
                         sh """
-                            scp -o StrictHostKeyChecking=no .env.production jenkins@192.168.102.3:C:/Users/jenkins/app.env
+                            scp -o StrictHostKeyChecking=no .env.production jenkins@${DEPLOY_SERVER}:C:/Users/jenkins/app.env
                         """
                         
                         // 3. Lấy lại User/Pass Docker để đăng nhập trên Server đích
@@ -75,7 +76,7 @@ pipeline {
                         )]) {
                             // 4. Thực hiện lệnh SSH với escape đúng các biến
                             sh """
-                                ssh -o StrictHostKeyChecking=no jenkins@192.168.102.3 << 'ENDSSH'
+                                ssh -o StrictHostKeyChecking=no jenkins@${DEPLOY_SERVER} << 'ENDSSH'
                                     echo "Dang nhap Docker..."
                                     echo \${REGISTRY_PASS} | docker login ${REGISTRY_URL} -u \${REGISTRY_USER} --password-stdin
                                     
