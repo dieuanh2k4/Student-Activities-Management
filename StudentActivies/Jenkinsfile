@@ -80,7 +80,15 @@ pipeline {
                                     echo 'Restart container...'
                                     docker stop ${IMAGE_NAME} || true
                                     docker rm ${IMAGE_NAME} || true
-                                    docker run -d --name ${IMAGE_NAME} -p 80:8080 --restart always ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}
+                                    docker run -d --name ${IMAGE_NAME} -p 80:8080 --restart always \
+                                        -e ASPNETCORE_ENVIRONMENT=Production \
+                                        -e ConnectionStrings__DefaultConnection='User Id=postgres.gvhtbrnyoanxfuozrehn;Password=StudentActivities-123456;Server=aws-1-ap-southeast-1.pooler.supabase.com;Port=5432;Database=postgres' \
+                                        -e MinIO__Endpoint=minio:9000 \
+                                        -e MinIO__AccessKey=miniouser \
+                                        -e MinIO__SecretKey=minio123456 \
+                                        -e MinIO__BucketName=studentactivities \
+                                        -e MinIO__UseSSL=false \
+                                        ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}
                                     
                                     echo 'Deployment completed!'
                                 "
