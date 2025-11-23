@@ -62,36 +62,35 @@ pipeline {
                     // 1. Kích hoạt SSH Agent để có quyền truy cập Server
                     sshagent(['ssh-credentials']) {
                         
-                        // 2. Lấy lại User/Pass Docker để đăng nhập trên Server đích
+                        // 2. Copy env file lên server
+                        sh """
+                            scp -o StrictHostKeyChecking=no .env.production jenkins@192.168.102.3:C:/Users/jenkins/app.env
+                        """
+                        
+                        // 3. Lấy lại User/Pass Docker để đăng nhập trên Server đích
                         withCredentials([usernamePassword(
                             credentialsId: 'docker-registry',
                             usernameVariable: 'REGISTRY_USER',
                             passwordVariable: 'REGISTRY_PASS'
                         )]) {
-                            // 3. Thực hiện lệnh SSH với escape đúng các biến
+                            // 4. Thực hiện lệnh SSH với escape đúng các biến
                             sh """
-                                ssh -o StrictHostKeyChecking=no jenkins@192.168.102.3 "
-                                    echo 'Dang nhap Docker...'
+                                ssh -o StrictHostKeyChecking=no jenkins@192.168.102.3 << 'ENDSSH'
+                                    echo "Dang nhap Docker..."
                                     echo \${REGISTRY_PASS} | docker login ${REGISTRY_URL} -u \${REGISTRY_USER} --password-stdin
                                     
-                                    echo 'Pull image...'
+                                    echo "Pull image..."
                                     docker pull ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}
                                     
-                                    echo 'Restart container...'
+                                    echo "Restart container..."
                                     docker stop ${IMAGE_NAME} || true
                                     docker rm ${IMAGE_NAME} || true
-                                    docker run -d --name ${IMAGE_NAME} -p 80:8080 --restart always \
-                                        -e ASPNETCORE_ENVIRONMENT=Production \
-                                        -e ConnectionStrings__DefaultConnection='User Id=postgres.gvhtbrnyoanxfuozrehn;Password=StudentActivities-123456;Server=aws-1-ap-southeast-1.pooler.supabase.com;Port=5432;Database=postgres' \
-                                        -e MinIO__Endpoint=minio:9000 \
-                                        -e MinIO__AccessKey=miniouser \
-                                        -e MinIO__SecretKey=minio123456 \
-                                        -e MinIO__BucketName=studentactivities \
-                                        -e MinIO__UseSSL=false \
+                                    docker run -d --name ${IMAGE_NAME} -p 80:8080 --restart always \\
+                                        --env-file C:/Users/jenkins/app.env \\
                                         ${REGISTRY_URL}/${IMAGE_NAME}:${IMAGE_TAG}
                                     
-                                    echo 'Deployment completed!'
-                                "
+                                    echo "Deployment completed!"
+ENDSSH
                             """
                         }
                     }
