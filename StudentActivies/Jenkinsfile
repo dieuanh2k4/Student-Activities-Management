@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         // IP của server chạy Docker Registry và nơi deploy app
-        DEPLOY_SERVER = "192.168.102.3"
+        DEPLOY_SERVER = "172.31.97.178"
         REGISTRY_URL = "${DEPLOY_SERVER}:5443" 
         IMAGE_NAME   = "studentactivities"
         IMAGE_TAG    = "latest"
