@@ -13,7 +13,7 @@ pipeline {
         // Dùng cho SCP/SSH (để kết nối từ container ra máy host)
         // DEPLOY_HOST = 'host.docker.internal'
         DEPLOY_SERVER = "${env.DEPLOY_HOSTNAME ?: env.COMPUTERNAME ?: 'host.docker.internal'}"
-        REGISTRY_URL = "${REGISTRY_HOST}:5443" 
+        REGISTRY_URL = "${REGISTRY_HOST}" 
         IMAGE_NAME   = "studentactivities"
         IMAGE_TAG    = "latest"
     }
