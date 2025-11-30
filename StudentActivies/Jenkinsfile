@@ -8,8 +8,12 @@ pipeline {
     environment {
         // Hostname của server chạy Docker Registry và nơi deploy app
         // Sử dụng hostname thay vì IP để tránh phải cập nhật khi IP thay đổi
+        // Dùng cho Docker (để khớp với chứng chỉ SSL)
+        REGISTRY_HOST = 'localhost:5443' 
+        // Dùng cho SCP/SSH (để kết nối từ container ra máy host)
+        // DEPLOY_HOST = 'host.docker.internal'
         DEPLOY_SERVER = "${env.DEPLOY_HOSTNAME ?: env.COMPUTERNAME ?: 'host.docker.internal'}"
-        REGISTRY_URL = "${DEPLOY_SERVER}:5443" 
+        REGISTRY_URL = "${REGISTRY_HOST}:5443" 
         IMAGE_NAME   = "studentactivities"
         IMAGE_TAG    = "latest"
     }
