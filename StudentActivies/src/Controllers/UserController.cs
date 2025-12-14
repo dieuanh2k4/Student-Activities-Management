@@ -40,7 +40,7 @@ namespace StudentActivities.src.Controllers
         }
 
         [HttpPost("create-user")]
-        [AllowAnonymous]  // Cho phép tạo user không cần đăng nhập
+        // [AllowAnonymous]  // Cho phép tạo user không cần đăng nhập
         public async Task<IActionResult> CreateUser([FromForm] CreateUserDto createUserDto)
         {
             try
