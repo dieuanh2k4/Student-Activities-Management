@@ -12,7 +12,7 @@ namespace StudentActivities.src.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    // [Authorize(Roles = "Admin")]  // Global filter: Chỉ Admin quản lý users
+    [Authorize(Roles = "Admin")]  // Global filter: Chỉ Admin quản lý users
     public class UserController : ApiControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -40,6 +40,7 @@ namespace StudentActivities.src.Controllers
         }
 
         [HttpPost("create-user")]
+        [AllowAnonymous]  // Cho phép tạo user không cần đăng nhập
         public async Task<IActionResult> CreateUser([FromForm] CreateUserDto createUserDto)
         {
             try
