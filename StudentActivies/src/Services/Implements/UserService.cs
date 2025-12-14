@@ -30,7 +30,8 @@ namespace StudentActivities.src.Services.Implements
 
         public async Task<Users> CreateUser([FromForm] CreateUserDto createUserDto)
         {
-            var checkUsername = _user.FirstOrDefault(u => u.UserName.Equals(createUserDto.UserName, StringComparison.OrdinalIgnoreCase));
+            var checkUsername = await _context.Users
+                .FirstOrDefaultAsync(u => u.UserName.ToLower() == createUserDto.UserName.ToLower());
 
             if (checkUsername != null)
             {
