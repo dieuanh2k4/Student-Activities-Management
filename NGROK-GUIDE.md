@@ -2,7 +2,7 @@
 
 ## 📋 Tóm tắt
 
-Dự án đã được deploy lên server `192.168.102.3` qua Jenkins. Để expose ra internet qua ngrok:
+Dự án đã được deploy lên server (sử dụng hostname `DESKTOP-QEDCEJ1` hoặc IP `192.168.102.3`) qua Jenkins. Để expose ra internet qua ngrok:
 
 ## 🚀 Cách sử dụng
 
@@ -38,7 +38,13 @@ Script sẽ:
 
 ### 3️⃣ **Xem Dashboard**
 
-Mở browser:
+Mở browser (thay `DESKTOP-QEDCEJ1` bằng hostname của server):
+
+```
+http://DESKTOP-QEDCEJ1:4040
+```
+
+Hoặc dùng IP:
 
 ```
 http://192.168.102.3:4040
@@ -69,7 +75,8 @@ Giả sử ngrok URL là: `https://abc123.ngrok-free.app`
 ### 🛑 Stop Ngrok
 
 ```powershell
-ssh jenkins@192.168.102.3 "docker stop ngrok-tunnel"
+ssh jenkins@DESKTOP-QEDCEJ1 "docker stop ngrok-tunnel"
+# Hoặc: ssh jenkins@192.168.102.3 "docker stop ngrok-tunnel"
 ```
 
 ## 🔧 Troubleshooting
@@ -77,25 +84,29 @@ ssh jenkins@192.168.102.3 "docker stop ngrok-tunnel"
 ### Container không chạy?
 
 ```powershell
-ssh jenkins@192.168.102.3 "docker ps"
+ssh jenkins@DESKTOP-QEDCEJ1 "docker ps"
+# Hoặc: ssh jenkins@192.168.102.3 "docker ps"
 ```
 
 ### App container bị stop?
 
 ```powershell
-ssh jenkins@192.168.102.3 "docker start studentactivities"
+ssh jenkins@DESKTOP-QEDCEJ1 "docker start studentactivities"
+# Hoặc: ssh jenkins@192.168.102.3 "docker start studentactivities"
 ```
 
 ### Xem logs ngrok?
 
 ```powershell
-ssh jenkins@192.168.102.3 "docker logs ngrok-tunnel"
+ssh jenkins@DESKTOP-QEDCEJ1 "docker logs ngrok-tunnel"
+# Hoặc: ssh jenkins@192.168.102.3 "docker logs ngrok-tunnel"
 ```
 
 ### Xem logs app?
 
 ```powershell
-ssh jenkins@192.168.102.3 "docker logs studentactivities"
+ssh jenkins@DESKTOP-QEDCEJ1 "docker logs studentactivities"
+# Hoặc: ssh jenkins@192.168.102.3 "docker logs studentactivities"
 ```
 
 ## 📚 Tham khảo
