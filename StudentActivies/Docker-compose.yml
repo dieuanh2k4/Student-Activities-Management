@@ -1,9 +1,11 @@
 services:
   server:
-    build: .
+    build:
+      context: ..
+      dockerfile: StudentActivies/Dockerfile
     container_name: backend
     ports:
-      - "8081:8080"
+      - "8082:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__DefaultConnection: "Host=database;Port=5432;Database=postgres;Username=StudentActivities;Password=${DB_PASSWORD}"
@@ -21,7 +23,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: postgres
     ports:
-      - "5433:5432"
+      - "5434:5432"
     volumes:
       - postgres-data:/var/lib/postgresql
     healthcheck:
@@ -49,8 +51,8 @@ services:
     image: minio/minio:latest
     container_name: minio-storage
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "9002:9000"
+      - "9003:9001"
     volumes:
       - minio-data:/data
     networks:

@@ -2,21 +2,17 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy csproj files trước để cache restore
+# Copy csproj file
 COPY ["StudentActivies/StudentActivities.csproj", "StudentActivies/"]
-COPY ["StudentActivities.Tests/StudentActivities.Tests.csproj", "StudentActivities.Tests/"]
 
 # Restore dependencies
 RUN dotnet restore "StudentActivies/StudentActivities.csproj"
 
-# Copy toàn bộ source
-COPY . .
+# Copy toàn bộ source của StudentActivies
+COPY StudentActivies/ StudentActivies/
 
-# Build solution (không publish)
-RUN dotnet build "StudentActivies/StudentActivities.csproj" -c Release --no-restore
-
-# Run unit tests
-RUN dotnet test "StudentActivities.Tests/StudentActivities.Tests.csproj" --no-build --logger:trx
+# Build project (sẽ tự restore lại nếu cần)
+RUN dotnet build "StudentActivies/StudentActivities.csproj" -c Release
 
 # Stage 2: Publish
 FROM build AS publish

@@ -65,7 +65,7 @@ if ($existingEntry) {
 # Ghi lại file
 $hostsContent | Set-Content $hostsFile -Encoding ASCII
 
-Write-Host "`nCurrent hosts file entries for $Hostname`:" -ForegroundColor Cyan
+Write-Host "`nCurrent hosts file entries for $Hostname:" -ForegroundColor Cyan
 Get-Content $hostsFile | Where-Object { $_ -match $Hostname } | ForEach-Object {
     Write-Host "  $_" -ForegroundColor Gray
 }
@@ -74,9 +74,9 @@ Get-Content $hostsFile | Where-Object { $_ -match $Hostname } | ForEach-Object {
 Write-Host "`nTesting hostname resolution..." -ForegroundColor Yellow
 try {
     $resolved = [System.Net.Dns]::GetHostAddresses($Hostname)
-    Write-Host "✓ Hostname resolves to: $($resolved.IPAddressToString)" -ForegroundColor Green
+    Write-Host "Hostname resolves to: $($resolved.IPAddressToString)" -ForegroundColor Green
 } catch {
-    Write-Host "⚠ Could not resolve hostname. DNS cache may need to be flushed." -ForegroundColor Yellow
+    Write-Host "Could not resolve hostname. DNS cache may need to be flushed." -ForegroundColor Yellow
     Write-Host "  Run: ipconfig /flushdns" -ForegroundColor Gray
 }
 
