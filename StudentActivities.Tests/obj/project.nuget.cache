@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ZP5p4wnF7ao=",
+  "dgSpecHash": "07iYeajYOvo=",
   "success": true,
   "projectFilePath": "D:\\4-1\\server 2\\ĐỒ ÁN\\StudentActivities\\StudentActivities.Tests\\StudentActivities.Tests.csproj",
   "expectedPackageFiles": [
@@ -183,7 +183,10 @@
     "C:\\Users\\Dieu Anh\\.nuget\\packages\\xunit.core\\2.5.3\\xunit.core.2.5.3.nupkg.sha512",
     "C:\\Users\\Dieu Anh\\.nuget\\packages\\xunit.extensibility.core\\2.5.3\\xunit.extensibility.core.2.5.3.nupkg.sha512",
     "C:\\Users\\Dieu Anh\\.nuget\\packages\\xunit.extensibility.execution\\2.5.3\\xunit.extensibility.execution.2.5.3.nupkg.sha512",
-    "C:\\Users\\Dieu Anh\\.nuget\\packages\\xunit.runner.visualstudio\\2.5.3\\xunit.runner.visualstudio.2.5.3.nupkg.sha512"
+    "C:\\Users\\Dieu Anh\\.nuget\\packages\\xunit.runner.visualstudio\\2.5.3\\xunit.runner.visualstudio.2.5.3.nupkg.sha512",
+    "C:\\Users\\Dieu Anh\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.22\\microsoft.netcore.app.ref.8.0.22.nupkg.sha512",
+    "C:\\Users\\Dieu Anh\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.22\\microsoft.windowsdesktop.app.ref.8.0.22.nupkg.sha512",
+    "C:\\Users\\Dieu Anh\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.22\\microsoft.aspnetcore.app.ref.8.0.22.nupkg.sha512"
   ],
   "logs": []
 }
