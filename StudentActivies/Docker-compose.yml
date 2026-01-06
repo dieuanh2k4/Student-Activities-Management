@@ -5,7 +5,7 @@ services:
       dockerfile: StudentActivies/Dockerfile
     container_name: backend
     ports:
-      - "8082:8080"
+      - "8084:8080"
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__DefaultConnection: "Host=database;Port=5432;Database=postgres;Username=StudentActivities;Password=${DB_PASSWORD}"
@@ -41,7 +41,7 @@ services:
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
-      - "80:80"
+      - "3000:80"
     depends_on:
       - server
     networks:
