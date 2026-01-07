@@ -7,7 +7,7 @@ namespace StudentActivities.src.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    // [Authorize]
     public class NotificationsController : ApiControllerBase
     {
         private readonly INotificationService _notificationService;

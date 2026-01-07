@@ -7,7 +7,7 @@ namespace StudentActivities.src.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]  // Global filter: Chỉ Admin quản lý học kỳ
+    // [Authorize(Roles = "Admin")]  // Global filter: Chỉ Admin quản lý học kỳ
     public class SemestersController : ControllerBase
     {
         private readonly ISemesterService _semesterService;
@@ -20,6 +20,7 @@ namespace StudentActivities.src.Controllers
         /// <summary>
         /// Tạo học kỳ mới
         /// </summary>
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateSemesterDto dto)
         {
@@ -62,6 +63,7 @@ namespace StudentActivities.src.Controllers
         /// <summary>
         /// Lấy học kỳ hiện tại
         /// </summary>
+        [Authorize(Roles = "Admin")]
         [HttpGet("current")]
         public async Task<IActionResult> GetCurrent()
         {
@@ -82,6 +84,7 @@ namespace StudentActivities.src.Controllers
         /// <summary>
         /// Lấy thông tin học kỳ theo ID
         /// </summary>
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -102,6 +105,7 @@ namespace StudentActivities.src.Controllers
         /// <summary>
         /// Cập nhật thông tin học kỳ
         /// </summary>
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:int}")]
         public async Task<IActionResult> Update(int id, [FromBody] UpdateSemesterDto dto)
         {
@@ -129,6 +133,7 @@ namespace StudentActivities.src.Controllers
         /// <summary>
         /// Xóa học kỳ
         /// </summary>
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {

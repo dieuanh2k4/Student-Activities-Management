@@ -12,7 +12,6 @@ namespace StudentActivities.src.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]  // Global filter: Chỉ Admin quản lý users
     public class UserController : ApiControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -23,7 +22,8 @@ namespace StudentActivities.src.Controllers
             _context = context;
             _userService = userService;
         }
-
+        
+        [Authorize(Roles = "Admin")]
         [HttpGet("get-all-user")]
         public async Task<IActionResult> GetAllUser()
         {
@@ -39,6 +39,7 @@ namespace StudentActivities.src.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("create-user")]
         // [AllowAnonymous]  // Cho phép tạo user không cần đăng nhập
         public async Task<IActionResult> CreateUser([FromForm] CreateUserDto createUserDto)
@@ -58,6 +59,7 @@ namespace StudentActivities.src.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("update-user/{id}")]
         public async Task<IActionResult> UpdateUser([FromForm] UpdateUserDto updateUserDto, int id)
         {
@@ -75,6 +77,7 @@ namespace StudentActivities.src.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("delete-user/{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {

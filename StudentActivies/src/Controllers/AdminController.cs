@@ -13,7 +13,6 @@ namespace StudentActivities.src.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")]  // Global filter: Chỉ Admin mới truy cập
     public class AdminController : ApiControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -25,6 +24,7 @@ namespace StudentActivities.src.Controllers
             _adminService = adminService;
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("get-all-admin")]
         public async Task<IActionResult> GetAllAdmin()
         {
@@ -40,6 +40,7 @@ namespace StudentActivities.src.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost("create-admin")]
         public async Task<IActionResult> CreateAdmin([FromForm] CreateAdminDto createAdminDto, int userid)
         {
@@ -58,6 +59,7 @@ namespace StudentActivities.src.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("update-admin/{id}")]
         public async Task<IActionResult> UpdateInforAdmin([FromForm] UpdateAdminDto updateAdminDto, int id)
         {
