@@ -7,7 +7,7 @@ namespace StudentActivities.src.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize] // Yêu cầu authentication
+    // [Authorize] // Yêu cầu authentication
     public class StatisticsController : ControllerBase
     {
         private readonly IStatisticsService _statisticsService;
@@ -26,6 +26,7 @@ namespace StudentActivities.src.Controllers
         /// </summary>
         /// <param name="filter">Bộ lọc (ClassId, FacultyId, SemesterId)</param>
         /// <returns>Thống kê sinh viên</returns>
+        [Authorize]
         [HttpGet("students")]
         [ProducesResponseType(typeof(StudentStatisticsDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetStudentStatistics([FromQuery] StudentStatisticsFilterDto? filter)
@@ -56,6 +57,7 @@ namespace StudentActivities.src.Controllers
         /// </summary>
         /// <param name="filter">Bộ lọc (StartDate, EndDate, Period: daily/monthly/yearly)</param>
         /// <returns>Thống kê sự kiện</returns>
+        [Authorize]
         [HttpGet("events/by-date")]
         [ProducesResponseType(typeof(EventStatisticsDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetEventStatisticsByDate([FromQuery] EventStatisticsFilterDto filter)
@@ -89,6 +91,7 @@ namespace StudentActivities.src.Controllers
         /// </summary>
         /// <param name="filter">Bộ lọc (StartDate, EndDate, Period: daily/monthly/yearly)</param>
         /// <returns>Thống kê câu lạc bộ</returns>
+        [Authorize]
         [HttpGet("clubs/by-date")]
         [ProducesResponseType(typeof(ClubStatisticsDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetClubStatisticsByDate([FromQuery] ClubStatisticsFilterDto filter)
@@ -122,6 +125,7 @@ namespace StudentActivities.src.Controllers
         /// </summary>
         /// <param name="filter">Bộ lọc (Status, FromDate, ToDate, OrganizerId)</param>
         /// <returns>Thống kê sự kiện theo trạng thái</returns>
+        [Authorize]
         [HttpGet("events/by-status")]
         [ProducesResponseType(typeof(EventStatusStatisticsDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetEventStatisticsByStatus([FromQuery] EventStatusFilterDto? filter)
@@ -151,6 +155,7 @@ namespace StudentActivities.src.Controllers
         /// Dashboard tổng quan - Tổng hợp tất cả thống kê
         /// </summary>
         /// <returns>Dashboard data</returns>
+        [Authorize]
         [HttpGet("dashboard")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetDashboard()

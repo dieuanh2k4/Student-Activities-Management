@@ -9,7 +9,7 @@ namespace StudentActivities.src.Controllers
 {
     [ApiController]
     [Route("api/admin/training-scores")]
-    [Authorize(Roles = "Admin")]
+    // [Authorize(Roles = "Admin")]
     public class TrainingScoreController : ApiControllerBase
     {
         private readonly ITrainingScoreService _trainingScoreService;
@@ -24,6 +24,7 @@ namespace StudentActivities.src.Controllers
         /// <summary>
         /// Xem danh sách điểm rèn luyện với filter (Admin only)
         /// </summary>
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAllTrainingScores([FromQuery] TrainingScoreFilterDto filter)
         {
@@ -41,6 +42,7 @@ namespace StudentActivities.src.Controllers
         /// <summary>
         /// Xem chi tiết điểm rèn luyện (Admin only)
         /// </summary>
+        [Authorize(Roles = "Admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTrainingScoreById(int id)
         {
@@ -64,6 +66,7 @@ namespace StudentActivities.src.Controllers
         /// <summary>
         /// Cập nhật điểm rèn luyện (Admin only)
         /// </summary>
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTrainingScore(int id, [FromBody] UpdateTrainingScoreDto dto)
         {
@@ -86,6 +89,7 @@ namespace StudentActivities.src.Controllers
         /// <summary>
         /// Cập nhật điểm rèn luyện hàng loạt cho tất cả sinh viên đã tham dự sự kiện (Admin only)
         /// </summary>
+        [Authorize(Roles = "Admin")]
         [HttpPut("events/{eventId}/bulk-update")]
         public async Task<IActionResult> UpdateEventTrainingPoints(int eventId, [FromBody] UpdateEventTrainingPointsDto dto)
         {
@@ -108,6 +112,7 @@ namespace StudentActivities.src.Controllers
         /// <summary>
         /// Cập nhật điểm rèn luyện hàng loạt cho tất cả thành viên câu lạc bộ (Admin only)
         /// </summary>
+        [Authorize(Roles = "Admin")]
         [HttpPut("clubs/{clubId}/bulk-update")]
         public async Task<IActionResult> UpdateClubTrainingPoints(int clubId, [FromBody] UpdateClubTrainingPointsDto dto)
         {
